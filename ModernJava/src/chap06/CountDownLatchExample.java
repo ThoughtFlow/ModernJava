@@ -24,7 +24,7 @@ public class CountDownLatchExample {
 		int workingSeconds = 0;
 		
 		for (int index = 0; index < NUMBER_OF_THREADS; ++index) {
-			String workerId = "Thread: " + new Integer(index);
+			String workerId = "Thread: " + index;
 			Thread nextThread = new Thread(new Worker(workerId, latch, ++workingSeconds + 2));
 			threads.add(nextThread);
 		}
