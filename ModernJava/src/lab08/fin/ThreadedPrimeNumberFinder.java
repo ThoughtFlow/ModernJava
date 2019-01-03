@@ -2,11 +2,7 @@ package lab08.fin;
 
 import lab.util.Util;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.ForkJoinTask;
-import java.util.concurrent.RecursiveTask;
+import java.util.concurrent.*;
 
 public class ThreadedPrimeNumberFinder {
 
@@ -52,7 +48,7 @@ public class ThreadedPrimeNumberFinder {
 	 * @return The number of primes found.
 	 */
 	private static int countPrimes(int range) throws InterruptedException, ExecutionException {
-		ForkJoinPool executor = (ForkJoinPool) Executors.newWorkStealingPool();
+		ForkJoinPool executor = new ForkJoinPool();
 		ForkJoinTask<Integer> totalPrimesFound = executor.submit(new PrimeFinderTask(1, range));
 		int found = totalPrimesFound.get();
 		executor.shutdown();

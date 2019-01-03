@@ -1,0 +1,60 @@
+// Commands used in jshell for lab18
+
+$ jshell
+
+1) Copy the find and stats method from Lab16.fin.ProcessHandleRepl:
+jshell> void find(String programName) {
+                ProcessHandle.allProcesses().
+                              filter(p -> p.info().commandLine().filter(s -> s.contains(programName)).isPresent()).
+                              map(handle -> handle.pid() + " " + handle.info().command().orElse("?")).forEach(System.out::println);
+            }
+
+jshell> void stats(long pid) {
+                Optional<ProcessHandle> handle = ProcessHandle.of(pid);
+
+                handle.ifPresentOrElse(h -> {
+                            System.out.println("User: " + h.info().user().orElse("?") +
+                                               " CPU duration: " + h.info().totalCpuDuration().orElse(Duration.ZERO).getSeconds());
+                        },
+                        () -> System.out.println(pid + " not found"));
+            }
+
+2) List the contents of the methods
+jshell> /methods
+
+3) Import the missing java.time.duration
+jshell> import java.time.Duration
+jshell> /imports
+
+4) Invoke the method find("jshell") and note the PID.
+jshell> find("jshell")
+
+5) Define the variable PID as a long and initialize it with the PID from the previous step
+jshell> long PID = 12345
+
+6) Edit the stats method and remove the parameter. Hard code the method to use PID.
+jshell> /edit stats
+jshell> /methods
+
+7) Save all declared methods and constants to file methods.txt
+jshell> /save context.txt
+
+8) Save the command history to file history.txt
+jshell> /save -history history.txt
+
+9) Reset Jshell
+jshell> /reset
+jshell> /methods
+jshell> /vars
+
+10) Reload the saved methods and constants
+jshell> /open context.txt
+
+11) Call stats again
+jshell> stats()
+
+12) Exit out of jshell and list the history file.
+jshell> /exit
+
+$ cat history.txt
+

@@ -1,4 +1,4 @@
-package lab07.movielock.fin;
+package lab07.init;
 
 public enum Category {
 

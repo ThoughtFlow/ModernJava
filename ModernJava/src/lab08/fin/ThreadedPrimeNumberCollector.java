@@ -4,7 +4,6 @@ import lab.util.Util;
 
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.RecursiveAction;
@@ -54,7 +53,7 @@ public class ThreadedPrimeNumberCollector {
      * @return A boolean array indicating whether or not its index is prime.
      */
     private static boolean[] getPrimes(int range) throws InterruptedException, ExecutionException {
-        ForkJoinPool executor = (ForkJoinPool) Executors.newWorkStealingPool();
+        ForkJoinPool executor = new ForkJoinPool();
         boolean[] primeCollection = new boolean[range + 1];
         Arrays.fill(primeCollection, false);
 

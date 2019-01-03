@@ -1,4 +1,4 @@
-package lab07.movielock.fin;
+package lab07.fin;
 
 import java.util.Set;
 

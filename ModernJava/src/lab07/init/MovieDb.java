@@ -1,4 +1,4 @@
-package lab07.movielock.init;
+package lab07.init;
 
 import java.util.List;
 import java.util.Set;
