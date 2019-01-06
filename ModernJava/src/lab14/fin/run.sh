@@ -2,4 +2,4 @@
 set -x
 
 #run it
-/tmp/jlink/bin/run
+/tmp/lab14/jlink/bin/run

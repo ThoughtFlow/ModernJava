@@ -1,4 +1,4 @@
-package lab15.init;
+package lab16.init;
 
 import java.net.http.HttpResponse;
 import java.nio.file.Path;

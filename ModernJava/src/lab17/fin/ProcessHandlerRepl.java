@@ -1,10 +1,13 @@
-package lab16.init;
+package lab17.fin;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.StringTokenizer;
 
 public class ProcessHandlerRepl {
@@ -17,7 +20,11 @@ public class ProcessHandlerRepl {
      * @throws IOException Thrown if the output file could not be created.
      */
     private static void start(String programName, String output) throws IOException {
-        // Implement this method
+        ProcessBuilder builder = new ProcessBuilder();
+        builder.command(programName).redirectOutput(ProcessBuilder.Redirect.to(new File(output))).start();
+
+        System.out.println("Program " + programName + " started: ");
+        find(programName);
     }
 
     /**
@@ -26,7 +33,9 @@ public class ProcessHandlerRepl {
      * @param programName Program to find.
      */
     private static void find(String programName) {
-        // Implement this method
+        ProcessHandle.allProcesses().
+                      filter(p -> p.info().commandLine().filter(s -> s.contains(programName)).isPresent()).
+                      map(handle -> handle.pid() + " " + handle.info().command().orElse("?")).forEach(System.out::println);
     }
 
     /**
@@ -35,23 +44,33 @@ public class ProcessHandlerRepl {
      * @param pid The PID of the program to kill.
      */
     private static void kill(long pid) {
-        // Implement this method
+        Optional<ProcessHandle> handle = ProcessHandle.of(pid);
+
+        handle.ifPresent(opt -> System.out.println("Killed: " + opt.pid()));
+        handle.ifPresentOrElse(ProcessHandle::destroy, () -> System.out.println(pid + " not found"));
     }
 
     /**
-     * Prints process stats for the given PID.
+     * Prints process stats for the given PID>.
      *
      * @param pid The pid for which to provide the stats.
      */
     private static void stats(long pid) {
-        // Implement this method
+        Optional<ProcessHandle> handle = ProcessHandle.of(pid);
+
+        handle.ifPresentOrElse(h -> {
+                    System.out.println("User: " + h.info().user().orElse("?") +
+                                       " CPU duration: " + h.info().totalCpuDuration().orElse(Duration.ZERO).getSeconds());
+                },
+                () -> System.out.println(pid + " not found"));
     }
 
     /**
      * Prints all of the PIDs of this host.
      */
     private static void all() {
-        // Implement this method
+        ProcessHandle.allProcesses().forEach(h ->
+                System.out.println(h.pid() + " " + h.info().command().orElse("")));
     }
 
     /**
