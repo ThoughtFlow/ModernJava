@@ -18,6 +18,7 @@ public class ProcessHandlerRepl {
      */
     private static void start(String programName, String output) throws IOException {
         // Implement this method
+        throw new RuntimeException("Not yet implemented");
     }
 
     /**
@@ -27,6 +28,7 @@ public class ProcessHandlerRepl {
      */
     private static void find(String programName) {
         // Implement this method
+        throw new RuntimeException("Not yet implemented");
     }
 
     /**
@@ -36,6 +38,7 @@ public class ProcessHandlerRepl {
      */
     private static void kill(long pid) {
         // Implement this method
+        throw new RuntimeException("Not yet implemented");
     }
 
     /**
@@ -45,6 +48,7 @@ public class ProcessHandlerRepl {
      */
     private static void stats(long pid) {
         // Implement this method
+        throw new RuntimeException("Not yet implemented");
     }
 
     /**
@@ -52,6 +56,7 @@ public class ProcessHandlerRepl {
      */
     private static void all() {
         // Implement this method
+        throw new RuntimeException("Not yet implemented");
     }
 
     /**
