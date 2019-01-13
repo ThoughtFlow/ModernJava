@@ -42,7 +42,7 @@ public class ThreadedPrimeNumberCollector {
 	 * @return The number of primes found.
 	 */
 	private static boolean[] getPrimes(int range) throws InterruptedException, ExecutionException {
-		ForkJoinPool executor = (ForkJoinPool) Executors.newWorkStealingPool();
+		ForkJoinPool executor = new ForkJoinPool();
 		boolean[] primeCollection = new boolean[range + 1];
 		Arrays.fill(primeCollection, false);
 

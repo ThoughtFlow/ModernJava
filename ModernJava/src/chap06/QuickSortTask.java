@@ -5,19 +5,22 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.*;
 
+/**
+ * QuickSort algorithm implemented using the Fork/Join framework. List is updated in-place but thread information is
+ * returned in a list and merged into the main list.
+ */
 public class QuickSortTask extends RecursiveTask<List<String>> {
 
     private final List<Integer> toSort;
-    private final List<String> threads;
+    private final List<String> threads = new ArrayList<>();
     private final int startingIndex;
     private final int size;
 
-    private QuickSortTask(List<Integer> toSort, int startingIndex, int size, List<String> threads)
+    private QuickSortTask(List<Integer> toSort, int startingIndex, int size)
     {
         this.toSort = toSort;
         this.startingIndex = startingIndex;
         this.size = size;
-        this.threads = threads;
     }
 
     @Override
@@ -52,12 +55,12 @@ public class QuickSortTask extends RecursiveTask<List<String>> {
                 low = high;
             }
 
-            QuickSortTask leftHalf = new QuickSortTask(toSort, startingIndex, low, threads);
+            QuickSortTask leftHalf = new QuickSortTask(toSort, startingIndex, low);
             leftHalf.fork();
-            QuickSortTask rightHalf = new QuickSortTask(toSort, low == startingIndex ? low + 1 : low, size, threads);
+            QuickSortTask rightHalf = new QuickSortTask(toSort, low == startingIndex ? low + 1 : low, size);
             rightHalf.fork();
-            leftHalf.join();
-            rightHalf.join();
+            threads.addAll(leftHalf.join());
+            threads.addAll(rightHalf.join());
         }
 
         return threads;
@@ -78,8 +81,8 @@ public class QuickSortTask extends RecursiveTask<List<String>> {
     public static void main(String... args) throws InterruptedException, ExecutionException {
         List<Integer> toSort = generateRandomList(1000);
 
-        QuickSortTask sort = new QuickSortTask(toSort, 0, toSort.size() - 1, new ArrayList<>());
-		ForkJoinPool executor = (ForkJoinPool) Executors.newWorkStealingPool();
+        QuickSortTask sort = new QuickSortTask(toSort, 0, toSort.size() - 1);
+		ForkJoinPool executor = new ForkJoinPool();
         ForkJoinTask<List<String>> task = executor.submit(sort);
 
         for (String nextThread : task.get()) {
@@ -92,6 +95,4 @@ public class QuickSortTask extends RecursiveTask<List<String>> {
 
         executor.shutdown();
     }
-
-
 }

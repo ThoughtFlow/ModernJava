@@ -1,4 +1,4 @@
-package lab05.fin;
+package lab02.fin;
 
 import java.util.function.Consumer;
 

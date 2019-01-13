@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.*;
 
+/**
+ * QuickSort algorithm implemented using the Fork/Join framework. List is updated in-place.
+ */
 public class QuickSortAction extends RecursiveAction {
 
     private final List<Integer> toSort;
@@ -73,7 +76,7 @@ public class QuickSortAction extends RecursiveAction {
         List<Integer> toSort = generateRandomList(1000);
 
         QuickSortAction sort = new QuickSortAction(toSort, 0, toSort.size() - 1);
-		ForkJoinPool executor = (ForkJoinPool) Executors.newWorkStealingPool();
+		ForkJoinPool executor = new ForkJoinPool();
         ForkJoinTask<Void> action = executor.submit(sort);
 
         action.get();

@@ -137,8 +137,8 @@ public class GenericsCovariance {
             GenericClass<?>[] array = new GenericClass<?>[2];
             array[0] = new GenericClass<ParentClass>();
             array[1] = new GenericClass<GenericClass>();
+            GenericClass<?> x = array[1];
         }
-
     }
 
     private static int count(Map<?, List<?>> map) {

@@ -10,26 +10,15 @@ import java.util.concurrent.SubmissionPublisher;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import static lab.util.Util.sleep;
+import static lab.util.Util.logWithThread;
+
 /**
  * This class shows a stock market data stream processing using reactive programming. 
  */
 public class StockMarketReactor {
 
 	private static long startTime = System.currentTimeMillis();
-
-	private static void log(String toLog) {
-		long time = System.currentTimeMillis() - startTime;
-		System.out.println(time + ": " + toLog);
-	}
-
-    private static void sleep(double seconds) {
-        try {
-            Thread.sleep((long) (seconds * 1000));
-        }
-        catch (InterruptedException e) {
-            // Swallow the error
-        }
-    }
 
     static void doWork(int processingTime) {
         sleep(processingTime);
@@ -38,13 +27,13 @@ public class StockMarketReactor {
 	private static void simulateMarket(SubmissionPublisher<MarketEvent> publisher, List<MarketEvent> events) {
 
 		events.stream().forEach(event -> {
-			log("Publishing event: " + event + " Estimated processing lag: " + publisher.estimateMaximumLag() +
-					   " Estimated demand: " + publisher.estimateMinimumDemand());
+			logWithThread("Publishing event: " + event + " Estimated processing lag: " + publisher.estimateMaximumLag() +
+					      " Estimated demand: " + publisher.estimateMinimumDemand());
 			publisher.offer(event,						// Publish this stock market event and let any/all subscribers process it.
 							1, TimeUnit.SECONDS,// Wait up to 1 seconds for a subscriber to process it or it will be dropped
 							(sub, message) ->			// This handler determines if the event should be retried or not if dropped
 								{
-									log("Message dropped: " + message);
+									logWithThread("Message dropped: " + message);
 									return false;       // Return false to indicate no retries
 								});	
 		}); 
@@ -56,7 +45,7 @@ public class StockMarketReactor {
 		try (SubmissionPublisher<MarketEvent> publisher = 
 				new SubmissionPublisher<>(ForkJoinPool.commonPool(),	// Create a publisher using the common ForkJoinPool as the async framework.  
 										  2, 		    // Queue size is set to two
-										  (analyzer, exception) -> log("TradeAnalyzer error: " + exception.getMessage()))) // If any subscribers errors out, print out the exception message
+										  (analyzer, exception) -> logWithThread("TradeAnalyzer error: " + exception.getMessage()))) // If any subscribers errors out, print out the exception message
 		{
 			// Only 1 subscriber is created and subscribed to market events.
 			// SubmissionPublisher acts like a multicast source so adding more subscribers will broadcast to all subscribers.
@@ -94,7 +83,7 @@ public class StockMarketReactor {
 		 */
 		@Override
 		public void onSubscribe(Subscription sub) {
-			log("Subscribed");
+			logWithThread("Subscribed");
 			this.subscription = sub;
 			
 			// Must ask for events or nothing will happen.
@@ -108,7 +97,7 @@ public class StockMarketReactor {
 		 */
 		@Override
 		public void onNext(MarketEvent next) {
-			log("Received event: " + next);
+			logWithThread("Received event: " + next);
 			subscription.request(1);
 			
 			// Any errors thrown by the TradeAnalyzer will call onError()
@@ -124,7 +113,7 @@ public class StockMarketReactor {
 		 */
 		@Override
 		public void onComplete() {
-			log("Worker completed");
+			logWithThread("Worker completed");
 		}
 
 		/**
@@ -134,7 +123,7 @@ public class StockMarketReactor {
 		 */
 		@Override
 		public void onError(Throwable throwable) {
-			log("Error received: " + throwable.getMessage());
+			logWithThread("Error received: " + throwable.getMessage());
 		}
 
 		/**

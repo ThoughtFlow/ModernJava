@@ -21,6 +21,4 @@ public class ThreadSafety {
 
         tLocal.set(sum);
     }
-
-
 }
