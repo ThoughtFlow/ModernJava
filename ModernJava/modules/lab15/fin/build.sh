@@ -2,7 +2,7 @@
 set -v
 
 rm -rf /tmp/lab15/bin /tmp/lab15/classes /tmp/lab15/mods
-mkdir /tmp/lab15/bin
+mkdir -p /tmp/lab15/bin
 
 # Suppressing warning about module names ending in digits
 javac -nowarn -d /tmp/lab15/mods/ --module-source-path modular $(find modular/com.lab15.movement -name "*.java")

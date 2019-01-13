@@ -2,7 +2,7 @@
 set -x
 
 rm -rf /tmp/lab14/jmods
-mkdir /tmp/lab14/jmods
+mkdir -p /tmp/lab14/jmods
 
 #Create
 jmod create /tmp/lab14/jmods/com.lab13.database.jmod --class-path ../../../out/production/com.lab13.database

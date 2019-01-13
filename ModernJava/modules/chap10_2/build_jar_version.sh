@@ -2,7 +2,7 @@
 set -v
 
 rm -rf /tmp/chap10_2/bin
-mkdir /tmp/chap10_2/bin
+mkdir -p /tmp/chap10_2/bin
 
 javac -d /tmp/chap10_2/mods/ --module-source-path src $(find src -name "*.java")
 

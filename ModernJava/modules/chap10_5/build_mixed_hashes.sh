@@ -2,7 +2,7 @@
 set -v
 
 rm -rf /tmp/chap10_5/jmods /tmp/chap10_5/jlink /tmp/chap10_5/jmods2
-mkdir /tmp/chap10_5/jmods /tmp/chap10_5/jmods2
+mkdir -p /tmp/chap10_5/jmods /tmp/chap10_5/jmods2
 
 #Compile
 javac -d /tmp/chap10_5/mods/ --module-source-path src $(find src -name "*.java")
