@@ -53,7 +53,7 @@ public class ThreadedPrimeNumberCollector {
      * @return A boolean array indicating whether or not its index is prime.
      */
     private static boolean[] getPrimes(int range) throws InterruptedException, ExecutionException {
-        ForkJoinPool executor = new ForkJoinPool();
+        ForkJoinPool executor = ForkJoinPool.commonPool();
         boolean[] primeCollection = new boolean[range + 1];
         Arrays.fill(primeCollection, false);
 

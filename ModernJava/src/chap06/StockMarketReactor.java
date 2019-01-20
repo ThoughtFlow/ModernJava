@@ -132,7 +132,7 @@ public class StockMarketReactor {
 		 * @param event The event to process.
 		 */
 		private void process(MarketEvent event) {
-			doWork(2);
+			doWork(2000);
 		}
 	}
 }

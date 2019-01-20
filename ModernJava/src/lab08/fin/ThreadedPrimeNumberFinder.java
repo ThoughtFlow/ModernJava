@@ -48,7 +48,7 @@ public class ThreadedPrimeNumberFinder {
 	 * @return The number of primes found.
 	 */
 	private static int countPrimes(int range) throws InterruptedException, ExecutionException {
-		ForkJoinPool executor = new ForkJoinPool();
+		ForkJoinPool executor = ForkJoinPool.commonPool();
 		ForkJoinTask<Integer> totalPrimesFound = executor.submit(new PrimeFinderTask(1, range));
 		int found = totalPrimesFound.get();
 		executor.shutdown();

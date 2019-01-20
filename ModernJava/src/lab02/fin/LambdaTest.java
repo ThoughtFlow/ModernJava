@@ -10,7 +10,7 @@ public class LambdaTest {
 
 	public static void main(String... args) {
 
-		IntConsumer i1 = x -> { System.out.println(x * x); };
+		IntConsumer i1 = x -> System.out.println(x * x);
 		i1.accept(3);
 
 //		Function<Integer, Integer> f = x -> x * x;
