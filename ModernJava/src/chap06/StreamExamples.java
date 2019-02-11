@@ -1,12 +1,8 @@
 package chap06;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.IntSummaryStatistics;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -14,7 +10,7 @@ public class StreamExamples {
 
     public static void testBuildOperations() {
         // Create a stream of integers 1, 2, and 3
-        Stream.of(1, 2, 3);
+        Stream.of(1, 2, 3); // Does nothing - not coherent
 
         // Store the streamed Integers inside an array
         Integer[] integers = Stream.of(1, 2, 3).toArray(Integer[]::new);
@@ -25,6 +21,8 @@ public class StreamExamples {
         // Stream to arrays
         integers = Stream.of(1, 2, 3).toArray(Integer[]::new);
 
+        // Getting a stream from a Collection
+        Stream<?> stream = Arrays.asList("One", "Two", "Three").stream();
     }
 
     public static void testBuilderOperations() {
@@ -42,6 +40,14 @@ public class StreamExamples {
     public static void testIterateOperations() {
         // Generate 3 elements and iterate over them
         Stream.of(1, 2, 3).forEach(System.out::println);
+
+        // Keep iterating until takeWhile condition is false
+        Stream.iterate(2, x -> x * x).takeWhile(x -> x < 100).forEach(x -> System.out.print(x + ": "));
+
+        // Drop the stream elements while the condition is true
+        System.out.println();
+        Stream.iterate(2, x -> x * 2).limit(10).dropWhile(x -> x < 1000).forEach(x -> System.out.print(x + ": "));
+        System.out.println();
     }
 
     public static void testFilterOperations() {
@@ -113,6 +119,13 @@ public class StreamExamples {
                         (BiConsumer<ArrayList<String>, String>) ArrayList<String>::add, // Accumulator
                         ArrayList<String>::addAll);                                     // Combiner
 
+        densePlaces.forEach(System.out::println);
+
+        // Using toList()
+        densePlaces =
+                population.keySet().stream().
+                        filter(s -> population.getOrDefault(s, 0) >= 110000).
+                        collect(Collectors.toList());
         densePlaces.forEach(System.out::println);
     }
 
@@ -201,18 +214,18 @@ public class StreamExamples {
 
     public static void main(String...args)
     {
-        testBuildOperations();
+//        testBuildOperations();
 //        testBuilderOperations();
-        testIterateOperations();
-        testFilterOperations();
-        testMapOperations();
+//        testIterateOperations();
+//        testFilterOperations();
+//        testMapOperations();
         testReduceOperations();
-        testPeekOperations();
+//        testPeekOperations();
 //        testStreamInterference();
-        testSpecializedStreams();
+//        testSpecializedStreams();
 
         int[] classOneScores = {90, 87, 65, 88, 76, 75, 99, 92, 82, 71};
         int[] classTwoScores = {77, 81, 97, 80, 63, 64, 55, 90, 89, 78};
-        printTestStats(classOneScores, classTwoScores);
+//        printTestStats(classOneScores, classTwoScores);
     }
 }
