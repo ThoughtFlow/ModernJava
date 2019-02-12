@@ -18,5 +18,10 @@ public class TransformerDemo {
             Transformer transformer = Transformer::removeSpaces;
             transformer.printTransform("This is my string");
         }
+        
+        {
+        	System.out.println(Transformer.capitalize("capitalize this"));
+        	System.out.println(Transformer.removeSpaces("r e m o v e - s p a c e s"));
+        }
     }
 }
