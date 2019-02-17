@@ -90,7 +90,7 @@ public class HttpFunctions {
         responseConsumer.accept(getAsStreamFunction.apply(urlString));
     }
 
-    private static void postResponseToFile(String urlString) {
+    private static void postResponseToFile(String urlString, String outputFile) {
 
         // Implement a function that takes a URL and performs an HTTP POST.
         // Should have a connection timeout of 5 seconds and should follow method redirects only.
@@ -114,7 +114,7 @@ public class HttpFunctions {
                         .build();
 
                 CompletableFuture<HttpResponse<Path>> future =
-                        client.sendAsync(request, HttpResponse.BodyHandlers.ofFile(Path.of("/tmp/download.txt")));
+                        client.sendAsync(request, HttpResponse.BodyHandlers.ofFile(Path.of(outputFile)));
                 return future.get();
             } catch (URISyntaxException | InterruptedException | ExecutionException exception) {
                 throw new RuntimeException(exception);
@@ -148,6 +148,6 @@ public class HttpFunctions {
         getBodyAsStream("https://www.oracle.com/technetwork/java/index.html");
 
         printSeperator();
-        postResponseToFile("http://httpbin.org/post");
+        postResponseToFile("http://httpbin.org/post", "/tmp/download.txt"); // use a different path for Windows
     }
 }

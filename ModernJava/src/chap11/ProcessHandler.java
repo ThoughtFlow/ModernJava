@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.Optional;
 
+import static lab.util.Util.sleep;
+
 public class ProcessHandler {
 
     private static void start(String programName) throws IOException {
@@ -44,8 +46,11 @@ public class ProcessHandler {
         }
         else {
             start(args[0]);
-//         kill();
+
             stats(args[0]);
+            
+            sleep(5000);
+            kill(args[0]);
         }
     }
 }

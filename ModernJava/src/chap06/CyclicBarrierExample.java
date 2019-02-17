@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
-import lab.util.Util;
+
+import static lab.util.Util.logWithThread;
+import static lab.util.Util.doWork;
 
 /**
  * This example shows how 3 worker threads can wait at a rendez-vous point before continuing.
@@ -13,10 +15,6 @@ public class CyclicBarrierExample {
 
 	private static final int NUMBER_OF_THREADS = 3;
 	
-	public static void log(String message) {
-		System.out.println(System.currentTimeMillis() + ": " + message);
-	}
-	
 	public static void main(String[] args) throws InterruptedException, BrokenBarrierException {
 		
 		List<Thread> threads = new ArrayList<Thread>(NUMBER_OF_THREADS);
@@ -24,8 +22,7 @@ public class CyclicBarrierExample {
 		int workingSeconds = 0;
 		
 		for (int index = 0; index < NUMBER_OF_THREADS; ++index) {
-			String workerId = "Thread: " + index;
-			Thread nextThread = new Thread(new Worker(workerId, sharedBarrier, ++workingSeconds + 2));
+			Thread nextThread = new Thread(new Worker(sharedBarrier, ++workingSeconds + 2));
 			threads.add(nextThread);
 		}
 		
@@ -33,21 +30,19 @@ public class CyclicBarrierExample {
 			nextThread.start();
 		}
 		
-		log("Waiting for all threads to finish...");
+		logWithThread("Waiting for all threads to finish...");
 		for (Thread nextThread : threads) {
 			nextThread.join();
 		}
-		log("Waiting for all threads to finish...Done");
+		logWithThread("Waiting for all threads to finish...Done");
 	}
 
 	private static class Worker implements Runnable {
 
-		private final String name;
 		private final CyclicBarrier rendezVous;
 		private final long delay;
 
-		public Worker(String name, CyclicBarrier barrier, int delayInSeconds) {
-			this.name = name;
+		public Worker(CyclicBarrier barrier, int delayInSeconds) {
 			this.rendezVous = barrier;
 			this.delay = delayInSeconds;
 		}
@@ -55,20 +50,20 @@ public class CyclicBarrierExample {
 		@Override
 		public void run() {
 
-			log(name + " is working...");
-			Util.doWork(delay);
-			log(name + " is working...done");
+			logWithThread("Working...");
+			doWork(delay);
+			logWithThread("Working...done");
 
 			try {
-				log(name + " is waiting...");
+				logWithThread("Waiting...");
 				rendezVous.await();
 			} catch (InterruptedException e) {
-				log(name + " is waiting...interrupted");
+				logWithThread("Waiting...interrupted");
 
 			} catch (BrokenBarrierException e) {
-				log(name + " is waiting...interrupted");
+				logWithThread("Waiting...interrupted");
 			}
-			log(name + " is waiting...done");
+			logWithThread("Waiting...done");
 		}
 	}
 }

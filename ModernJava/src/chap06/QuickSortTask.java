@@ -6,7 +6,7 @@ import java.util.Random;
 import java.util.concurrent.*;
 
 /**
- * QuickSort algorithm implemented using the Fork/Join framework. List is updated in-place but thread information is
+ * QuickSort algorithm implemented using the Fork/Join framework. List is updated in-place but thread information depicting which thread did what is
  * returned in a list and merged into the main list.
  */
 public class QuickSortTask extends RecursiveTask<List<String>> {

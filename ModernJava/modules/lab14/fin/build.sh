@@ -1,7 +1,7 @@
 #!/bin/bash
 set -x
 
-rm -rf /tmp/lab14/jmods /tmp/lab14/mods
+rm -rf /tmp/lab14/jmods /tmp/lab14/mods /tmp/lab14/jlink
 mkdir -p /tmp/lab14/jmods /tmp/lab14/mods
 
 #Compile
@@ -28,4 +28,4 @@ jmod describe /tmp/lab14/jmods/com.lab14.client.jmod
 
 #Jlink it
 rm -rf /tmp/jlink
-jlink --module-path $JAVA_HOME/jmods:/tmp/lab14/jmods --add-modules com.lab14.client --output /tmp/lab14/jlink --launcher run=com.lab14.client/com.lab14.client.Client
+jlink --module-path $JAVA_HOME/jmods:/tmp/lab14/jmods --add-modules com.lab14.client,com.lab14.cache --output /tmp/lab14/jlink --launcher run=com.lab14.client/com.lab14.client.Client

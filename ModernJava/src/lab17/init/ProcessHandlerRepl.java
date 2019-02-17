@@ -17,7 +17,7 @@ public class ProcessHandlerRepl {
      * @throws IOException Thrown if the output file could not be created.
      */
     private static void start(String programName, String output) throws IOException {
-        // Implement this method
+        // ### Implement me ###
         throw new RuntimeException("Not yet implemented");
     }
 
@@ -27,7 +27,7 @@ public class ProcessHandlerRepl {
      * @param programName Program to find.
      */
     private static void find(String programName) {
-        // Implement this method
+        // ### Implement me ###
         throw new RuntimeException("Not yet implemented");
     }
 
@@ -37,7 +37,7 @@ public class ProcessHandlerRepl {
      * @param pid The PID of the program to kill.
      */
     private static void kill(long pid) {
-        // Implement this method
+        // ### Implement me ###
         throw new RuntimeException("Not yet implemented");
     }
 
@@ -47,7 +47,7 @@ public class ProcessHandlerRepl {
      * @param pid The pid for which to provide the stats.
      */
     private static void stats(long pid) {
-        // Implement this method
+        // ### Implement me ###
         throw new RuntimeException("Not yet implemented");
     }
 
@@ -55,7 +55,7 @@ public class ProcessHandlerRepl {
      * Prints all of the PIDs of this host.
      */
     private static void all() {
-        // Implement this method
+        // ### Implement me ###
         throw new RuntimeException("Not yet implemented");
     }
 

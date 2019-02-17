@@ -7,7 +7,8 @@ import java.util.concurrent.Exchanger;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import lab.util.Util;
+import static lab.util.Util.doWork;
+import static lab.util.Util.logWithThread;
 
 /**
  * This example shows how threads can establish a rendez-vous point to exchange data. 
@@ -16,10 +17,6 @@ public class ExchangerExample {
 
 	// If you choose an odd number, one of the worker threads will timeout waiting for the exchange.
 	private static final int NUMBER_OF_THREADS = 8;
-	
-	public static void log(String message) {
-		System.out.println(System.currentTimeMillis() + ": " + message);
-	}
 	
 	public static void main(String[] args) throws InterruptedException, BrokenBarrierException {
 		
@@ -37,11 +34,11 @@ public class ExchangerExample {
 			nextThread.start();
 		}
 		
-		log("Waiting for all threads to finish...");
+		logWithThread("Waiting for all threads to finish...");
 		for (Thread nextThread : threads) {
 			nextThread.join();
 		}
-		log("Waiting for all threads to finish...Done");
+		logWithThread("Waiting for all threads to finish...Done");
 	}
 
 	private static class Worker implements Runnable {
@@ -59,15 +56,15 @@ public class ExchangerExample {
 		@Override
 		public void run() {
 
-			Util.doWork(delay);
+			doWork(delay);
 
 			try {
 				String exchangedString = exchanger.exchange(name, 10, TimeUnit.SECONDS);
-				log("Exchanged " + name + " with " + exchangedString);
+				logWithThread("Exchanged " + name + " with " + exchangedString);
 			} catch (InterruptedException e) {
 				
 			} catch (TimeoutException exception) {
-				log("Exchange timed out " + name);
+				logWithThread("Exchange timed out " + name);
 			}
 		}
 	}

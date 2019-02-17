@@ -14,6 +14,7 @@ public class ThreadedClassWithLocks {
             locker.readLock().lock();
             sum = durationInSeconds1 + durationInSeconds2; // Thread-safe block
         } finally {
+        	// Always use finally block
             locker.readLock().unlock();
         }
 
@@ -26,6 +27,7 @@ public class ThreadedClassWithLocks {
             durationInSeconds1 += secondsA; // Thread-safe block
             durationInSeconds2 += secondsB;
         } finally {
+        	// Always use finally block
             locker.writeLock().unlock();
         }
     }

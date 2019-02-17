@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
-import lab.util.Util;
+import static lab.util.Util.logWithThread;
+import static lab.util.Util.doWork;
 
 /**
  * This example shows how semaphores can be used to abstract licenses. Each worker thread must first obtain a license
@@ -14,17 +15,13 @@ public class SemaphoreExample {
 
 	private static final int NUMBER_OF_THREADS = 5;
 	
-	public static void log(String message) {
-		System.out.println(System.currentTimeMillis() + ": " + message);
-	}
-	
 	public static void main(String[] args) throws InterruptedException {
 		
 		List<Thread> threads = new ArrayList<Thread>(NUMBER_OF_THREADS);
 		Semaphore semaphore = new Semaphore(NUMBER_OF_THREADS / 2);
 		
 		for (int index = 0; index < NUMBER_OF_THREADS; ++index) {
-			Thread nextThread = new Thread(new Worker("Thread: " + Integer.valueOf(index), semaphore, (index * 2 + 1)));
+			Thread nextThread = new Thread(new Worker(semaphore, (index * 2 + 1)));
 			threads.add(nextThread);
 		}
 		
@@ -39,12 +36,10 @@ public class SemaphoreExample {
 
 	private static class Worker implements Runnable {
 
-		private final String name;
 		private final Semaphore semaphore;
 		private final long delay;
 
-		public Worker(String name, Semaphore semaphore, long delay) {
-			this.name = name;
+		public Worker(Semaphore semaphore, long delay) {
 			this.semaphore = semaphore;
 			this.delay = delay;
 		}
@@ -54,12 +49,12 @@ public class SemaphoreExample {
 
 			for (int index = 0; index < 3; ++ index) {
 			   try {
-				   log(name + " trying to acquire...");
+				   logWithThread("Trying to acquire...");
 				   semaphore.acquire();
-				   log(name + " trying to acquire...acquired");
-				   Util.doWork(delay);
+				   logWithThread("Trying to acquire...acquired");
+				   doWork(delay);
 				   semaphore.release();
-				   log(name + " trying to acquire...released");
+				   logWithThread("Trying to acquire...released");
 			   } catch (InterruptedException e) {
 			       // Do something with exception
 			   }

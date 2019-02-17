@@ -3,7 +3,9 @@ package chap06;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
-import lab.util.Util;
+
+import static lab.util.Util.logWithThread;
+import static lab.util.Util.doWork;
 
 /**
  * This example shows how a master thread can wait for 3 worker threads to each complete their work until the master
@@ -13,10 +15,6 @@ public class CountDownLatchExample {
 
 	private static final int NUMBER_OF_THREADS = 3;
 	
-	public static void log(String message) {
-		System.out.println(System.currentTimeMillis() + ": " + message);
-	}
-	
 	public static void main(String[] args) throws InterruptedException {
 		
 		List<Thread> threads = new ArrayList<Thread>(NUMBER_OF_THREADS);
@@ -24,8 +22,7 @@ public class CountDownLatchExample {
 		int workingSeconds = 0;
 		
 		for (int index = 0; index < NUMBER_OF_THREADS; ++index) {
-			String workerId = "Thread: " + index;
-			Thread nextThread = new Thread(new Worker(workerId, latch, ++workingSeconds + 2));
+			Thread nextThread = new Thread(new Worker(latch, ++workingSeconds + 2));
 			threads.add(nextThread);
 		}
 		
@@ -33,19 +30,17 @@ public class CountDownLatchExample {
 			nextThread.start();
 		}
 
-		log("Waiting for all threads to finish...");
+		logWithThread("Waiting for all threads to finish...");
 		latch.await();
-		log("Waiting for all threads to finish...Done");
+		logWithThread("Waiting for all threads to finish...Done");
 	}
 
 	private static class Worker implements Runnable {
 
-		private final String name;
 		private final CountDownLatch latch;
 		private final long delay;
 
-		public Worker(String name, CountDownLatch latch, int delayInSeconds) {
-			this.name = name;
+		public Worker(CountDownLatch latch, int delayInSeconds) {
 			this.latch = latch;
 			this.delay = delayInSeconds;
 		}
@@ -53,9 +48,9 @@ public class CountDownLatchExample {
 		@Override
 		public void run() {
 
-			log(name + " is working...");
-			Util.doWork(delay);
-			log(name + " is working...done");
+			logWithThread("Working...");
+			doWork(delay);
+			logWithThread("Working...done");
 
 			latch.countDown();
 		}

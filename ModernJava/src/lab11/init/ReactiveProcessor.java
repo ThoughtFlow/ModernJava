@@ -42,8 +42,9 @@ public class ReactiveProcessor {
             Function<Flow.Subscriber<Integer>, List<Integer>> eventPublisher = null;
 
             // Implement the flow subscriber and replace the null
-            List<Integer> droppedNumbers = eventPublisher.apply(null /* subscriber goes here */);
-            List<Integer> processedNumbers = null; // Implement a method in subscriber that will return the processed numbers.
+            List<Integer> droppedNumbers = eventPublisher.apply(null /* ###Implement me###*/);
+            // Implement a method in subscriber that will return the processed numbers.
+            List<Integer> processedNumbers = null; // ###Implement me###
             verify(droppedNumbers, processedNumbers);
         }
     }

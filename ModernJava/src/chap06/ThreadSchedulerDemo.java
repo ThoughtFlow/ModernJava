@@ -1,7 +1,5 @@
 package chap06;
 
-import lab.util.Util;
-
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -10,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import static lab.util.Util.logWithThread;
-import static lab.util.Util.sleep;
+import static lab.util.Util.doWork;
 
 /**
  * Class to demo the Thread Scheduler.
@@ -42,7 +40,7 @@ public class ThreadSchedulerDemo {
             logWithThread("Running scheduler at fixed rate =====================");
             ScheduledFuture<?> result = service.scheduleAtFixedRate(() -> {
                 logWithThread("Run every 3 seconds after 3 seconds - fixed rate");
-                sleep(2000);
+                doWork(2);
             }, 3, 3, TimeUnit.SECONDS);
 
             try {
@@ -59,7 +57,7 @@ public class ThreadSchedulerDemo {
             logWithThread("Running scheduler at fixed delay ====================");
             ScheduledFuture<?> result = service.scheduleWithFixedDelay(() -> {
                 logWithThread("Run every 3 seconds after 3 seconds - fixed delay");
-                sleep(1000);
+                doWork(1);
             }, 3, 3, TimeUnit.SECONDS);
 
             try {
