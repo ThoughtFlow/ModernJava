@@ -73,7 +73,7 @@ public class ThreadSafeMovieDb implements MovieDb {
 
 		try {
 			locker.readLock().lock();
-		   movies.forEach(next -> movieTitles.add(next.getName()));
+		    movies.forEach(next -> movieTitles.add(next.getName()));
 		}
 		finally {
 			// Make sure the unlock is in a finally block.
