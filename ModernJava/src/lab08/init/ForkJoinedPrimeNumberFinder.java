@@ -1,14 +1,16 @@
-package lab08.fin;
+package lab08.init;
 
 import lab.util.Util;
 
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ForkJoinTask;
+import java.util.concurrent.RecursiveTask;
 
-public class ThreadedPrimeNumberFinder {
+
+public class ForkJoinedPrimeNumberFinder {
 
 	private static class PrimeFinderTask extends RecursiveTask<Integer> {
-
-		private static final int OPTIMAL_RANGE = 1000;
 
 		private final int startRange;
 		private final int endRange;
@@ -20,21 +22,13 @@ public class ThreadedPrimeNumberFinder {
 
 		@Override
 		public Integer compute() {
-			int count = 0;
-			int range = endRange - startRange;
 
-			if (range > OPTIMAL_RANGE) {
-			    int halfWay = range / 2 + startRange;
-				PrimeFinderTask firstHalf = new PrimeFinderTask(startRange, halfWay);
-				firstHalf.fork();
-				PrimeFinderTask secondHalf = new PrimeFinderTask(halfWay + 1, endRange);
-				secondHalf.fork();
-				count = firstHalf.join() + secondHalf.join();
-			}
-			else {
-				for (int primeCandidate = startRange; primeCandidate <= endRange; ++primeCandidate) {
-					count += Util.isPrime(primeCandidate) ? 1 : 0;
-				}
+            // Refactor this method so that the work is divided into smaller chunks of 1000 elements.
+            // Use fork and join
+			int count = 0;
+
+			for (int primeCandidate = startRange; primeCandidate <= endRange; ++primeCandidate) {
+			    count += Util.isPrime(primeCandidate) ? 1 : 0;
 			}
 
 			return count;

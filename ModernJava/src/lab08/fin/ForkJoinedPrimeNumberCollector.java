@@ -8,7 +8,7 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.RecursiveAction;
 
-public class ThreadedPrimeNumberCollector {
+public class ForkJoinedPrimeNumberCollector {
 
     private static class PrimeFinderAction extends RecursiveAction {
 
