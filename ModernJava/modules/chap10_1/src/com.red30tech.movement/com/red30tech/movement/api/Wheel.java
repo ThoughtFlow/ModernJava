@@ -13,8 +13,7 @@ public class Wheel {
 
    public static Wheel buildStandardWheel() {
       Wheel wheel = new Wheel();
-      RubberTire tire = RubberTire.buildRubberTire();
-      wheel.attach(new Rim(), tire);
+      wheel.attach(new Rim(), new RubberTire());
 
       return wheel;
    }
@@ -41,10 +40,6 @@ public class Wheel {
    public double getRpm() {
       return rim.getRpm();
    }
-
-  public RubberTire getRubberTire() {
-     return tire;
-  }
 
    private void setRpm(double velocityRequested) {
       double circumferenceInMetres = Math.PI * 2 * tire.getRadiusCm() / 100;

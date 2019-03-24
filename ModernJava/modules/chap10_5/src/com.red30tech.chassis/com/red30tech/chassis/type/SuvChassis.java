@@ -5,9 +5,8 @@ import com.red30tech.movement.api.Wheel;
 import com.red30tech.chassis.api.Chassis;
 import com.red30tech.airbag.api.Airbag;
 
-
 /**
- * Suv implementation of the Chassis class.
+ * Suv implementation of the Chassis.
  */
 public class SuvChassis implements Chassis {
 

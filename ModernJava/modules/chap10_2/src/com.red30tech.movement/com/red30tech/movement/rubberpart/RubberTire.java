@@ -11,20 +11,6 @@ public class RubberTire {
 
    private int tirePressureKpa = 205;
    private double rpm;
-   private Valve valve;
-
-   public static RubberTire buildRubberTire() {
-      RubberTire tire = new RubberTire();
-      Valve valve = new Valve();
-      valve.attachTo(tire);
-      tire.valve = valve;
-
-      return tire;
-   }
-
-   public void pumpAir() {
-      valve.pumpAir();
-   }
 
    public void setTirePressure(int tirePressureKpa) {
       this.tirePressureKpa = tirePressureKpa;

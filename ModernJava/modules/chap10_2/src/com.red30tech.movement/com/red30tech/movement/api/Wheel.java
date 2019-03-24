@@ -13,8 +13,7 @@ public class Wheel {
 
    public static Wheel buildStandardWheel() {
       Wheel wheel = new Wheel();
-      RubberTire tire = RubberTire.buildRubberTire();
-      wheel.attach(new Rim(), tire);
+      wheel.attach(new Rim(), new RubberTire());
 
       return wheel;
    }

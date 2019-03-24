@@ -32,12 +32,4 @@ public class Axle {
     // Returns the average of the two wheels in case of differences
     return (leftWheel.getVelocityInKph() + rightWheel.getVelocityInKph()) / 2;
   }
-
-  public Wheel getLeftWheel() {
-     return leftWheel;
-  }
-
-  public Wheel getRightWheel() {
-     return rightWheel;
-  }
 }

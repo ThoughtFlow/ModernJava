@@ -16,6 +16,4 @@ public interface Chassis {
   public boolean isSafeTirePressure(); 
 
   public void pumpAir();
-  
-  public boolean testAirbag();
 }

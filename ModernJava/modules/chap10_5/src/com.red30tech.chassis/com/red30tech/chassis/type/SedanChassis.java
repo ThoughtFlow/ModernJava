@@ -6,7 +6,7 @@ import com.red30tech.chassis.api.Chassis;
 import com.red30tech.airbag.api.Airbag;
 
 /**
- * Sedan impolementation of the Chassis interface.
+ * Sedan implementation of the Chassis.
  */
 public class SedanChassis implements Chassis {
 

@@ -1,21 +1,59 @@
 package com.red30tech.chassis.api;
 
-/**
- * Interface used by chassis to implement different types of platforms for SUVs, Sedans, Trucks, etc.
+import com.red30tech.axle.api.Axle;
+import com.red30tech.movement.api.Wheel;
+
+
+/** 
+ * This class is an abstact representation of a car Chassis.
  */
-public interface Chassis {
+public class Chassis {
 
-  public String getChassisName(); 
+  private Axle frontAxle;
+  private Axle rearAxle;
 
-  public void increaseVelocity(); 
+  public static Chassis buildStandardChassis() {
+     Chassis chassis = new Chassis();
+     chassis.frontAxle = Axle.buildStandardAxle();
+     chassis.rearAxle = Axle.buildStandardAxle();
 
-  public void decreaseVelocity();
+     return chassis;
+  }
 
-  public double getVelocityInKph();
+  public void increaseVelocity() {
+     frontAxle.increaseRpm();
+     rearAxle.increaseRpm();
+  }
 
-  public boolean isSafeTirePressure(); 
+  public void decreaseVelocity() {
+     frontAxle.decreaseRpm();
+     rearAxle.decreaseRpm();
+  }
 
-  public void pumpAir();
-  
-  public boolean testAirbag();
+  public double getVelocityInKph() {
+     return (frontAxle.getVelocityInKph() + rearAxle.getVelocityInKph()) / 2;
+  }
+
+  public boolean isSafeTirePressure() {
+     return isSafeTirePressure(frontAxle.getLeftWheel()) &&
+            isSafeTirePressure(frontAxle.getRightWheel()) &&
+            isSafeTirePressure(rearAxle.getLeftWheel()) &&
+            isSafeTirePressure(rearAxle.getRightWheel());
+       
+  }
+
+  public void pumpAir() {
+     pumpAir(frontAxle.getLeftWheel());
+     pumpAir(frontAxle.getRightWheel());
+     pumpAir(rearAxle.getLeftWheel());
+     pumpAir(rearAxle.getRightWheel());
+  }
+
+  private void pumpAir(Wheel wheel) {
+     wheel.getRubberTire().pumpAir();
+  }
+
+  private boolean isSafeTirePressure(Wheel wheel) {
+     return wheel.getRubberTire().getTirePressure() > 50;
+  }
 }

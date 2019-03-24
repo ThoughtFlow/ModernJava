@@ -1,7 +1,7 @@
 package com.red30tech.movement.api;
 
 /**
- * Test class for the Wheel class.
+ * This is the test class for Wheel
  */
 public class TestWheel {
 
