@@ -1,20 +1,18 @@
-package lab05.fin;
+package lab05.init;
 
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class Collection {
 
     private static Double getAverageWithFilter(List<String> list, String searchWord) {
-        return list.stream().
-                collect(Collectors.filtering(s -> s.contains(searchWord), Collectors.averagingInt(String::length)));
+        // Implement this
+        return 0d;
     }
 
-    private static Map<Boolean, List<String>> getDictionary(List<String> list, String searchWord) {
-        return list.stream().collect(Collectors.partitioningBy(s -> s.contains(searchWord)));
+    private static Map<Boolean, List<String>> getLinesWithWord(List<String> list, String searchWord) {
+        // Implement this
+        return new HashMap<>();
     }
 
     public static void main(String... args) {
@@ -67,9 +65,9 @@ public class Collection {
                 "Friends In Low Places");
 
         System.out.println("Average title length for songs that contain the word \"Love\": " + getAverageWithFilter(topCountrySongs, "Love"));
-        Map<Boolean, List<String>> found = getDictionary(topCountrySongs, "Love");
+        Map<Boolean, List<String>> found = getLinesWithWord(topCountrySongs, "Love");
 
         System.out.println("Songs containing the word \"Love\":");
-        found.get(true).forEach(s -> System.out.println(" - " + s));
+        found.getOrDefault(true, Collections.emptyList()).forEach(s -> System.out.println(" - " + s));
     }
 }
