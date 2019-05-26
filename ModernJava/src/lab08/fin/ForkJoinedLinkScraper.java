@@ -46,7 +46,6 @@ public class ForkJoinedLinkScraper {
 			else {
 				scrapedUrls = new ArrayList<>();
 				for (int index = startIndex; index <= endIndexInclusive; ++index) {
-					Util.scrapeHrefs(urls.get(index)).stream().forEach(System.out::println);
 					scrapedUrls.addAll(Util.scrapeHrefs(urls.get(index)));
 				}
 			}
@@ -89,16 +88,10 @@ public class ForkJoinedLinkScraper {
 
 				Map<String, Integer> map1 = firstHalf.join();
 				Map<String, Integer> map2 = secondHalf.join();
-				map1.entrySet().stream().forEach(e -> Util.logWithThread("bef: " + startIndex + "-->" + endIndexExclusive + " map1::Key: " + e.getKey() + ": value: " + e.getValue()));
-				map2.entrySet().stream().forEach(e -> Util.logWithThread("bef: " + startIndex + " -->" + endIndexExclusive + " map2::Key: " + e.getKey() + ": value: " + e.getValue()));
 				catalog = Util.merge(map1, map2);
-				catalog.entrySet().stream().forEach(e -> Util.logWithThread("aft: " + startIndex + " -->" + endIndexExclusive + " map2::Key: " + e.getKey() + ": value: " + e.getValue()));
 			}
 			else {
-//				lines.subList(startIndex, endIndexExclusive).stream().forEach(s -> Util.logWithThread(startIndex + "-->" + endIndexExclusive + " in::" + s + "::"));
 				catalog = catalog(lines.subList(startIndex, endIndexExclusive));
-
-//				catalog.entrySet().stream().forEach(e -> Util.logWithThread(startIndex + "-->" + endIndexExclusive + " out::Key: " + e.getKey() + ": value: " + e.getValue()));
 			}
 
 			return catalog;
@@ -121,17 +114,14 @@ public class ForkJoinedLinkScraper {
 		return catalog.get();
 	}
 
-	static Map<String, Integer> catalog(List<String> stringsToCatalogue) {
+	private static Map<String, Integer> catalog(List<String> stringsToCatalogue) {
 
 		Map<String, Integer> map = new ConcurrentHashMap<>();
 
 		stringsToCatalogue.stream().forEach(s -> {
-//			Util.logWithThread("  ->before Value: " + map.get(s));
 			map.merge(s, 1, (v1, v2) -> ++v1);
-//			Util.logWithThread("  ->after Value: " + map.get(s));
 		});
 
-//		map.entrySet().stream().forEach(e -> System.out.println("process::Key: " + e.getKey() + ". value: " + e.getValue()));
 		return map;
 	}
 
@@ -152,11 +142,10 @@ public class ForkJoinedLinkScraper {
 		try {
 			Map<String, Integer> results = invoke(urls);
 
-			for (String nextKey : results.keySet()) {
-				System.out.println(nextKey + ": " + results.get(nextKey));
-			}
+			System.out.println("Scraped links and count: ");
+			results.entrySet().forEach(e -> System.out.println(" - " + e.getKey() + ": " + e.getValue()));
 		} catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();
-	}
+		}
 	}
 }

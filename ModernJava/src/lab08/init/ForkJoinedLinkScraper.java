@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.RecursiveTask;
 
 public class ForkJoinedLinkScraper {
@@ -25,7 +26,7 @@ public class ForkJoinedLinkScraper {
 		@Override
 		protected List<String> compute() {
 
-			// Do forking and joining here
+			// Implement this: Do forking and joining here
 			List<String> scrapedUrls = new ArrayList<>();
 			for (String nextUrl : urls) {
 				scrapedUrls.addAll(Util.scrapeHrefs(nextUrl));
@@ -51,7 +52,7 @@ public class ForkJoinedLinkScraper {
 
 			Map<String, Integer> catalog;
 
-			// Do forking and joining here
+			// Implement this: Do forking and joining here
 			catalog = Util.catalog(hrefs);
 
 			// Use merge to merge all forked catalogs into 1
@@ -86,12 +87,10 @@ public class ForkJoinedLinkScraper {
 					"https://www.ebay.com",
 					"https://www.apple.com");
 
-
 			Map<String, Integer> results = invoke(urls);
 
-			for (String nextKey : results.keySet()) {
-				System.out.println(nextKey + ": " + results.get(nextKey));
-			}
+			System.out.println("Scraped links and count: ");
+			results.entrySet().forEach(e -> System.out.println(" - " + e.getKey() + ": " + e.getValue()));
 		}
 	}
 }
