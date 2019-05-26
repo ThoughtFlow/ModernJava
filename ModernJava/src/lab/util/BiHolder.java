@@ -17,11 +17,14 @@ public class BiHolder<T, U> {
 	 * @param t Value to set.
 	 * @param u Value to set.
 	 */
-    public BiHolder(T t, U u)
-    {
+    public BiHolder(T t, U u) {
     	this.t = t;
     	this.u = u;
     }
+
+    public BiHolder(T t) {
+    	this.t = t;
+	}
 
     /**
      * Returns T

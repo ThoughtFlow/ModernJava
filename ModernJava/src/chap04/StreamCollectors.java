@@ -1,10 +1,9 @@
 package chap04;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -53,6 +52,18 @@ public class StreamCollectors {
         return data.stream().collect(Collectors.mapping(s -> s.length() > 5 ? s.substring(0, 5) : s, Collectors.joining()));
     }
 
+    private static Map<Integer, List<String>> testToMap(List<String> data) {
+        // Map the list of strings by their size
+        Function<String, Integer> keyMapper = String::length;
+        Function<String, List<String>> valueMapper = s -> {
+            List<String> collection = new ArrayList<>();
+            collection.add(s);
+            return collection;
+        };
+        BinaryOperator<List<String>> mergeFunction = (list1, list2) -> {list1.addAll(list2); return list1;};
+        return data.stream().collect(Collectors.toMap(keyMapper, valueMapper, mergeFunction));
+    }
+
     private static Map<Boolean, List<String>> testPartitioning(List<String> data) {
         // Partition the list of strings inside a map where the key is a boolean determining whether or not the string contains the "Java" word
         return data.stream().collect(Collectors.partitioningBy(s -> s.contains("Java")));
@@ -88,6 +99,7 @@ public class StreamCollectors {
 
         System.out.println(testJoining(list));
         System.out.println(testMapping(list));
+        testToMap(list).entrySet().forEach(e -> System.out.println("Key: " + e.getKey() + " Value: " + e.getValue()));
         testPartitioning(list).entrySet().forEach(e -> System.out.println("Key: " + e.getKey() + " Value: " + e.getValue()));
         System.out.println(testTeeing(list));
     }

@@ -1,10 +1,11 @@
 package lab05.fin;
 
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class Collection {
@@ -16,6 +17,18 @@ public class Collection {
 
     private static Map<Boolean, List<String>> getLinesWithWord(List<String> list, String searchWord) {
         return list.stream().collect(Collectors.partitioningBy(s -> s.contains(searchWord)));
+    }
+
+    private static Map<String, Integer> getWordDictionary(List<String> list) {
+
+        Function<String, String> keyMapper = String::toLowerCase;
+        Function<String, Integer> valueMapper = s -> 1;
+        BinaryOperator<Integer> mergeFunction = (oldV, newV) -> ++oldV;
+        Supplier<Map<String, Integer>> supplier = TreeMap::new;
+
+        return list.stream().
+                flatMap(s -> Arrays.stream(s.split(" "))).
+                collect(Collectors.toMap(keyMapper, valueMapper, mergeFunction, supplier));
     }
 
     public static void main(String... args) {
@@ -72,5 +85,8 @@ public class Collection {
 
         System.out.println("Songs containing the word \"Love\":");
         found.getOrDefault(true, Collections.emptyList()).forEach(s -> System.out.println(" - " + s));
+
+        System.out.println("Dictionary of words and occurences in songs: ");
+        getWordDictionary(topCountrySongs).entrySet().forEach((e -> System.out.println(" - " + e.getKey() + ": " + e.getValue())));
     }
 }

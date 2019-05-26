@@ -2,6 +2,10 @@ package lab05.init;
 
 
 import java.util.*;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class Collection {
 
@@ -11,6 +15,11 @@ public class Collection {
     }
 
     private static Map<Boolean, List<String>> getLinesWithWord(List<String> list, String searchWord) {
+        // Implement this
+        return new HashMap<>();
+    }
+
+    private static Map<String, Integer> getWordDictionary(List<String> list) {
         // Implement this
         return new HashMap<>();
     }
@@ -69,5 +78,8 @@ public class Collection {
 
         System.out.println("Songs containing the word \"Love\":");
         found.getOrDefault(true, Collections.emptyList()).forEach(s -> System.out.println(" - " + s));
+
+        System.out.println("Dictionary of words and occurences in songs: ");
+        getWordDictionary(topCountrySongs).entrySet().forEach((e -> System.out.println(" - " + e.getKey() + ": " + e.getValue())));
     }
 }
