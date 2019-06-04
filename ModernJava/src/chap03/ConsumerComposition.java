@@ -1,4 +1,4 @@
-package chap02;
+package chap03;
 
 import java.util.function.Consumer;
 import java.util.logging.Logger;

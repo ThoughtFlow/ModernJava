@@ -1,4 +1,4 @@
-package chap02;
+package chap03;
 
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;

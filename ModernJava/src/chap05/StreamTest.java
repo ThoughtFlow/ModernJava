@@ -1,4 +1,4 @@
-package chap04;
+package chap05;
 
 import java.util.List;
 import java.util.function.IntPredicate;
