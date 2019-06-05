@@ -5,7 +5,6 @@ import java.util.*;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class Collection {
@@ -24,7 +23,7 @@ public class Collection {
         Function<String, String> keyMapper = String::toLowerCase;
         Function<String, Integer> valueMapper = s -> 1;
         BinaryOperator<Integer> mergeFunction = (oldV, newV) -> ++oldV;
-        Supplier<Map<String, Integer>> supplier = TreeMap::new;
+        Supplier<Map<String, Integer>> supplier = TreeMap::new; // Using TreeMap to order by key
 
         return list.stream().
                 flatMap(s -> Arrays.stream(s.split(" "))).
