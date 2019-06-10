@@ -117,9 +117,9 @@ public class ReactiveProcessor {
             Function<Flow.Subscriber<Integer>, List<Integer>> eventPublisher = ReactiveProcessor::publishEventsWithError;
             MySubscriber subscriber = new MySubscriber();
 
-            List<Integer> droppedNmbers = eventPublisher.apply(subscriber);
+            List<Integer> droppedNumbers = eventPublisher.apply(subscriber);
             List<Integer> processedNumbers = subscriber.getNumbersProcessed();
-            verify(droppedNmbers, processedNumbers);
+            verify(droppedNumbers, processedNumbers);
         }
     }
 

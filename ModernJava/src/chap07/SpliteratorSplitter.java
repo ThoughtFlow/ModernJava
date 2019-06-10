@@ -14,7 +14,7 @@ import java.util.Spliterator;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
-public class SpliteratorSpliter {
+public class SpliteratorSplitter {
 
 	private static final int MAX_SPLITERATORS = 8;
 	

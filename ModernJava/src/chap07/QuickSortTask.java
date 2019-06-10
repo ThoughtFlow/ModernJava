@@ -85,12 +85,17 @@ public class QuickSortTask extends RecursiveTask<List<String>> {
 		ForkJoinPool executor = new ForkJoinPool();
         ForkJoinTask<List<String>> task = executor.submit(sort);
 
+        System.out.println("Random numbers generated: ");
+        for (int number : toSort) {
+            System.out.println(" - " + number);
+        }
         for (String nextThread : task.get()) {
             System.out.println(nextThread);
         }
 
+        System.out.println("Random numbers sorted: ");
         for (int number : toSort) {
-            System.out.println(number);
+            System.out.println(" - " + number);
         }
 
         executor.shutdown();

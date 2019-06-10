@@ -75,8 +75,9 @@ public class QuickSortAction extends RecursiveAction {
     public static void main(String... args) throws InterruptedException, ExecutionException {
         List<Integer> toSort = generateRandomList(1000);
 
+        System.out.println("Random numbers generated: ");
         for (int number : toSort) {
-            System.out.println(number);
+            System.out.println(" - " + number);
         }
 
         QuickSortAction sort = new QuickSortAction(toSort, 0, toSort.size() - 1);
@@ -84,8 +85,10 @@ public class QuickSortAction extends RecursiveAction {
         ForkJoinTask<Void> action = executor.submit(sort);
 
         action.get();
+
+        System.out.println("Random numbers sorted: ");
         for (int number : toSort) {
-            System.out.println(number);
+            System.out.println(" - " + number);
         }
 
         executor.shutdown();

@@ -28,7 +28,7 @@ public class ReactiveProcessorWithPublisher {
         // SubmissionPublisher is an AutoClosable
         try (SubmissionPublisher<Integer> publisher =
                      new SubmissionPublisher<>(ForkJoinPool.commonPool(),	// Create a publisher using the common ForkJoinPool as the async framework.
-                             2, 		                                    // Queue size is set to two
+                             2, 		                    // Queue size is set to two
                              (analyzer, exception) -> logWithThread("Error: " + exception.getMessage()))) // If any subscribers errors out, print out the exception message
         {
             publisher.subscribe(subscriber);
@@ -36,7 +36,7 @@ public class ReactiveProcessorWithPublisher {
             BiPredicate<Flow.Subscriber<? super Integer>, Integer> onDrop = (sub, number) -> {missedNumbers.add(number); return false;};
             IntStream.rangeClosed(1, 1000).forEach(event -> {
                publisher.offer(event,				       // Publish this event and let any subscriber process it.
-                       50, TimeUnit.MILLISECONDS,          // Wait up to 50 milliseconds for a subscriber to process it or it will be dropped
+                       50, TimeUnit.MILLISECONDS,  // Wait up to 50 milliseconds for a subscriber to process it or it will be dropped
                                onDrop);                    // This handler determines if the event should be retried or not if dropped
             });
         }
@@ -57,7 +57,7 @@ public class ReactiveProcessorWithPublisher {
         // SubmissionPublisher is an AutoClosable
         try (SubmissionPublisher<Integer> publisher =
                      new SubmissionPublisher<>(ForkJoinPool.commonPool(),	// Create a publisher using the common ForkJoinPool as the async framework.
-                             2, 		                                    // Queue size is set to two
+                             2, 		                    // Queue size is set to two
                              (analyzer, exception) -> logWithThread("Error: " + exception.getMessage()))) // If any subscribers errors out, print out the exception message
         {
             publisher.subscribe(subscriber);
@@ -109,8 +109,10 @@ public class ReactiveProcessorWithPublisher {
 
             // Implement the subscriber
             List<Integer> droppedNumbers = eventPublisher.apply(null /* ###Implement me###*/);
+
             // Implement a method in subscriber that will return the processed numbers.
             List<Integer> processedNumbers = null; // ###Implement me### 
+
             verify(droppedNumbers, processedNumbers);
         }
 
@@ -119,9 +121,11 @@ public class ReactiveProcessorWithPublisher {
             Function<Flow.Subscriber<Integer>, List<Integer>> eventPublisher = ReactiveProcessorWithPublisher::publishEventsWithError;
 
             // Implement the subscriber
-            List<Integer> droppedNumbers = eventPublisher.apply(null /* subscriber goes here */);
+            List<Integer> droppedNumbers = eventPublisher.apply(null /* ###Implement me###*/);
+
             // Implement a method in subscriber that will return the processed numbers.
             List<Integer> processedNumbers = null; // ###Implement me### 
+
             verify(droppedNumbers, processedNumbers);
         }
     }
