@@ -71,14 +71,18 @@ public class StreamCollectors {
     private static List<String> testTeeing(List<String> data) {
         // Teeing function will send the list to the two filtering collectors then merge the results.
         // In this example, it will return all strings that contain the word "Java" or "Oracle" once (does not return the same string multiple times).
-        Collector<String, ?, List<String>> filteringJavaCollector = Collectors.filtering(s -> s.contains("Java"), Collectors.toList());
-        Collector<String, ?, List<String>> filteringOracleCollector = Collectors.filtering(s -> s.contains("Oracle"), Collectors.toList());
-        BinaryOperator<List<String>> unique = (list1, list2) -> {
-            list1.addAll(list2);
-            return list1.stream().distinct().collect(Collectors.toList());
-        };
 
-        return data.stream().collect(Collectors.teeing(filteringJavaCollector, filteringOracleCollector, unique));
+        // Only available in Java 12
+//        Collector<String, ?, List<String>> filteringJavaCollector = Collectors.filtering(s -> s.contains("Java"), Collectors.toList());
+//        Collector<String, ?, List<String>> filteringOracleCollector = Collectors.filtering(s -> s.contains("Oracle"), Collectors.toList());
+//        BinaryOperator<List<String>> unique = (list1, list2) -> {
+//            list1.addAll(list2);
+//            return list1.stream().distinct().collect(Collectors.toList());
+//        };
+//
+//        return data.stream().collect(Collectors.teeing(filteringJavaCollector, filteringOracleCollector, unique));
+
+        return Collections.emptyList();
     }
 
     public static void main(String... args) {
