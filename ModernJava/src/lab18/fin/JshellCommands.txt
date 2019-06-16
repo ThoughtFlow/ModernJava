@@ -37,10 +37,10 @@ jshell> /edit stats
 jshell> /methods
 
 7) Save all declared methods and constants to file methods.txt
-jshell> /save context.txt
+jshell> /save /tmp/context.txt
 
 8) Save the command history to file history.txt
-jshell> /save -history history.txt
+jshell> /save -history /tmp/history.txt
 
 9) Reset Jshell
 jshell> /reset
@@ -48,7 +48,7 @@ jshell> /methods
 jshell> /vars
 
 10) Reload the saved methods and constants
-jshell> /open context.txt
+jshell> /open /tmp/context.txt
 
 11) Call stats again
 jshell> stats()
@@ -56,5 +56,5 @@ jshell> stats()
 12) Exit out of jshell and list the history file.
 jshell> /exit
 
-$ cat history.txt
+$ cat /tmp/history.txt
 

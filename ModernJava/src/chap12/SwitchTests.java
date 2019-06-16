@@ -6,10 +6,35 @@ import java.util.EnumSet;
  * These may not yet be supported by your IDE. Uncomment the switch expressions and use runSwitchTests in a bash shell
  * to compile and run these examples.
  */
-@SuppressWarnings("UnnecessaryDefault")
+@SuppressWarnings({"UnnecessaryDefault", "EnhancedSwitchMigration"})
 public class SwitchTests {
 
     enum Day {MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY};
+
+    private static String getDayTypeClassicJava(Day day) {
+        String type;
+
+        switch (day) {
+            case FRIDAY:
+            case SATURDAY:
+            case SUNDAY:
+                type = "Fun day";
+                break;
+            case WEDNESDAY:
+                type = "Hump day";
+                break;
+            case MONDAY:
+            case TUESDAY:
+            case THURSDAY:
+                type = "Blah day";
+                break;
+            default:
+                throw new IllegalStateException("Unknown" + day);
+        }
+
+        return type;
+    }
+
 
     private static String getDayType(Day day) {
         String type = "?";
@@ -55,6 +80,10 @@ public class SwitchTests {
     }
 
     public static void main (String... args) {
+
+        System.out.println("getDayTypeWithClassicJava=======");
+        EnumSet.allOf(Day.class).forEach(day -> System.out.println(day + " is " + getDayTypeClassicJava(day)));
+        System.out.println();
 
         System.out.println("GetDayType=======");
         EnumSet.allOf(Day.class).forEach(day -> System.out.println(day + " is " + getDayType(day)));

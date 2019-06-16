@@ -29,6 +29,7 @@ public class StackWalkerInstrumenter {
         return singleInstance;
     }
 
+    // Singleton instance
     private StackWalkerInstrumenter(Class<?> instrumentationClass) {
         instrumentationClassName = instrumentationClass.getName();
     }
@@ -39,12 +40,13 @@ public class StackWalkerInstrumenter {
 
             // Capture all the stack frame except for this method itself.
             stackFrameStore.add(StackWalker.getInstance().
-                    walk(nextFrame -> nextFrame.filter(frame -> !frame.getMethodName().equals("captureStackFrame")).
+                    walk(nextFrame -> nextFrame.filter(frame -> !(frame.getMethodName().equals("captureStackFrame") && frame.getClassName().equals(this.getClass().getName()))).
                             collect(Collectors.toList())));
         }
     }
 
     public void processStackFramesWithClass(Consumer<StackWalker.StackFrame> consumer) {
+        // Print the stack backwards - as it would appear chronologically
         stackFrameStore.
            forEach(next -> {
                      System.out.println("Next occurrence: ");
