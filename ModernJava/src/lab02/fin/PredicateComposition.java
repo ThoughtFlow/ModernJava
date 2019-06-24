@@ -40,8 +40,8 @@ public class PredicateComposition
 	
     public static void main(String[] args)
     {
-        Predicate<Double[]> isAllPassed = l -> {
-            for (double next : l)
+        Predicate<Double[]> isAllPassed = scores -> {
+            for (double next : scores)
             {
                 if (next < .60)
                 {
@@ -51,21 +51,21 @@ public class PredicateComposition
             return true;
         };
         
-        Predicate<Double[]> isBAverage = l -> {
+        Predicate<Double[]> isBAverage = scores -> {
             double sum = 0;
-            for (double next : l)
+            for (double next : scores)
             {
                 sum += next;
             }
 
-            return sum / l.length >= .80;
+            return sum / scores.length >= .80;
         };
 
-        Predicate<Double[]> isLastPerfect = l -> l[l.length - 1] == 1;
+        Predicate<Double[]> isLastPerfect = scores -> scores[scores.length - 1] == 1;
         
-        Predicate<Double[]> isAnyMissed = l ->
+        Predicate<Double[]> isAnyMissed = scores ->
         {
-            for (double next : l)
+            for (double next : scores)
             {
                 if (next == 0)
                 {
