@@ -8,7 +8,7 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class StreamCollection {
+public class StreamTricks {
 
     private static List<String> filterForOccurrences(List<String> stringList, String searchWord) {
         // Returns the lines where one or more occurrences of searchWord is found from the list of strings
@@ -51,9 +51,9 @@ public class StreamCollection {
         // from the list of strings but keeps original string intact.
         return stringList.stream().map(s -> new BiHolder<>(s, s)).
                 filter(h -> h.getT().contains(searchWord)).
-                map(h -> {h.setU(h.getU().replace(" ", "")); return h;}).
-                map(h -> {h.setU(h.getU().replace(",", "")); return h;}).
-                map(h -> {h.setU(h.getU().replace(".", "")); return h;}).
+                peek(h -> h.setU(h.getU().replace(" ", ""))).
+                peek(h -> h.setU(h.getU().replace(",", ""))).
+                peek(h -> h.setU(h.getU().replace(".", ""))).
                 reduce((l, r) -> l.getU().length() > r.getU().length() ? l : r).
                 orElse(new BiHolder<>("None found")).getT();
     }
