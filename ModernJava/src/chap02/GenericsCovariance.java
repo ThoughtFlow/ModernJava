@@ -1,8 +1,6 @@
 package chap02;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GenericsCovariance {
 
@@ -139,10 +137,25 @@ public class GenericsCovariance {
             array[1] = new GenericClass<GenericClass>();
             GenericClass<?> x = array[1];
         }
+
+        {
+            Map<Integer, List<String>> myMap = new HashMap<>();
+            myMap.put(1, Arrays.asList("One", "Two", "Three"));
+            myMap.put(2, Arrays.asList("Four", "Five"));
+            myMap.put(3, Arrays.asList("Six", "Seven"));
+            System.out.println("Element count in list: " + count(myMap));
+        }
     }
 
-    private static int count(Map<?, List<?>> map) {
-        return map.values().stream().map(List::size).reduce(0, (l, r) -> l + r);
+    private static int count(Map<?, ? extends List<?>> map) {
+
+        int totalSize = 0;
+
+        for (List<?> nextList : map.values()) {
+            totalSize += nextList.size(); // Don’t care about the key type or list type
+        }
+
+        return totalSize;
     }
 
     private static class ParentClass {
