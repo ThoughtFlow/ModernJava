@@ -1,5 +1,6 @@
 package chap01_2;
 
+@FunctionalInterface
 public interface Transformer {
 
     public String transform(String str);

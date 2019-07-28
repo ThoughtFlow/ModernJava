@@ -52,12 +52,12 @@ public class SwitchTests {
 
     private static void printDayType(Day day) {
         // Java 12 switch statements need not return values.
-//        switch (day) {
-//            case FRIDAY, SATURDAY, SUNDAY  -> System.out.println(day + " is Fun day");
-//            case WEDNESDAY                 -> System.out.println(day + " is Hump day");
-//            case MONDAY, TUESDAY, THURSDAY -> System.out.println(day + " is Blah day");
-//            default -> System.out.println(day + "is Unknown day");
-//        };
+        switch (day) {
+            case FRIDAY, SATURDAY, SUNDAY  -> System.out.println(day + " is Fun day");
+            case WEDNESDAY                 -> System.out.println(day + " is Hump day");
+            case MONDAY, TUESDAY, THURSDAY -> System.out.println(day + " is Blah day");
+            default -> System.out.println(day + "is Unknown day");
+        };
     }
 
     private static String getDayTypeWithBreak(Day day) {
@@ -65,16 +65,16 @@ public class SwitchTests {
 
         // Java 12 switch statements can also be combined with classic-style break. But then, each case must have a
         // break statement.
-//        type = switch (day) {
-//            case FRIDAY, SATURDAY, SUNDAY:
-//                break "Fun day";
-//            case WEDNESDAY:
-//                break "Hump day";
-//            case MONDAY, TUESDAY, THURSDAY:
-//                break "Blah day";
-//            default:
-//                break "Unknown value";
-//        };
+        type = switch (day) {
+            case FRIDAY, SATURDAY, SUNDAY:
+                break "Fun day";
+            case WEDNESDAY:
+                break "Hump day";
+            case MONDAY, TUESDAY, THURSDAY:
+                break "Blah day";
+            default:
+                break "Unknown value";
+        };
 
         return type;
     }
