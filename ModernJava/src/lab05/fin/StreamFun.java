@@ -1,6 +1,5 @@
 package lab05.fin;
 
-import java.util.function.IntPredicate;
 import java.util.stream.IntStream;
 
 @SuppressWarnings("SameParameterValue")

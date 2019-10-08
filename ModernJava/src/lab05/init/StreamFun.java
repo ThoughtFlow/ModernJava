@@ -1,7 +1,5 @@
 package lab05.init;
 
-import java.util.stream.IntStream;
-
 @SuppressWarnings("SameParameterValue")
 public class StreamFun {
 
