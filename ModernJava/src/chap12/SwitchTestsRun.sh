@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
-javac -d /tmp -cp . --release 12 --enable-preview SwitchTests.java
+javac -d /tmp -cp . --release 13 --enable-preview SwitchTests.java
 
-java -cp /tmp --enable-preview chap12.SwitchTests
+if [ $? -eq 0 ]; then
+   java -cp /tmp --enable-preview chap12.SwitchTests
+fi
+

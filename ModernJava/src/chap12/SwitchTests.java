@@ -35,51 +35,46 @@ public class SwitchTests {
         return type;
     }
 
-
     private static String getDayType(Day day) {
-        String type = "?";
-
-        // Java 12 switch expressions
-//        type = switch (day) {
-//            case FRIDAY, SATURDAY, SUNDAY -> "Fun day";
-//            case WEDNESDAY -> "Hump day";
-//            case MONDAY, TUESDAY, THURSDAY -> "Blah day";
-//            default -> "Unknown day";
-//        };
-
-        return type;
+        // Java 13 switch expressions
+        return switch (day) {
+            case FRIDAY, SATURDAY, SUNDAY -> "Fun day";
+            case WEDNESDAY -> "Hump day";
+            case MONDAY, TUESDAY, THURSDAY -> "Blah day";
+            default -> "Unknown day";
+        };
     }
 
     private static void printDayType(Day day) {
-        // Java 12 switch statements need not return values.
-//        switch (day) {
-//            case FRIDAY, SATURDAY, SUNDAY  -> System.out.println(day + " is Fun day");
-//            case WEDNESDAY                 -> System.out.println(day + " is Hump day");
-//            case MONDAY, TUESDAY, THURSDAY -> System.out.println(day + " is Blah day");
-//            default -> System.out.println(day + "is Unknown day");
-//        };
+        // Java 13 switch statements need not return values.
+        switch (day) {
+            case FRIDAY, SATURDAY, SUNDAY  -> System.out.println(day + " is Fun day");
+            case WEDNESDAY                 -> System.out.println(day + " is Hump day");
+            case MONDAY, TUESDAY, THURSDAY -> System.out.println(day + " is Blah day");
+            default -> System.out.println(day + "is Unknown day");
+        };
     }
 
-    private static String getDayTypeWithBreak(Day day) {
-        String type = "?";
+    private static String getDayTypeWithYield(Day day) {
+        String dayType = "";
 
-        // Java 12 switch statements can also be combined with classic-style break. But then, each case must have a
-        // break statement.
-//        type = switch (day) {
+        // Java 13 switch statements also introduce yield statement that "break" out of each case statement.
+        // Yields must return a value and each case must return a yield.
+//        dayType = switch (day) {
 //            case FRIDAY, SATURDAY, SUNDAY:
-//                break "Fun day";
+//                yield "Fun day";
 //            case WEDNESDAY:
-//                break "Hump day";
+//                yield "Hump day";
 //            case MONDAY, TUESDAY, THURSDAY:
-//                break "Blah day";
+//                yield "Blah day";
 //            default:
-//                break "Unknown value";
+//                yield "Unknown value";
 //        };
 
-        return type;
+        return dayType;
     }
 
-    public static void main (String... args) {
+     public static void main (String... args) {
 
         System.out.println("getDayTypeWithClassicJava=======");
         EnumSet.allOf(Day.class).forEach(day -> System.out.println(day + " is " + getDayTypeClassicJava(day)));
@@ -94,7 +89,7 @@ public class SwitchTests {
         System.out.println();
 
         System.out.println("GetDayTypeWithBreak=======");
-        EnumSet.allOf(Day.class).forEach(day -> System.out.println(day + " is " + getDayTypeWithBreak(day)));
+        EnumSet.allOf(Day.class).forEach(day -> System.out.println(day + " is " + getDayTypeWithYield(day)));
         System.out.println();
     }
 }
