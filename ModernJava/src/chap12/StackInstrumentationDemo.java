@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public class StackWalkingTest {
+public class StackInstrumentationDemo {
 
     private static void walkingTest() {
         System.out.println("Walking test");
