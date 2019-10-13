@@ -5,12 +5,12 @@ public class MultiLineTest {
     private static String getAlignedMultiLine() {
         String textBlock = "";
 
-//        textBlock = """
-//                           Formatted text block text
-//                           Every line is aligned
-//                           But leading spaces used in program formatting are ignored
-//                           This is important in keeping everything aligned
-//                           """;
+        textBlock = """
+                           Formatted text block text
+                           Every line is aligned
+                           But leading spaces used in program formatting are ignored
+                           This is important in keeping everything aligned
+                           """;
 
         return textBlock;
     }
@@ -18,12 +18,12 @@ public class MultiLineTest {
     private static String getMisalignedMultiLine() {
         String textBlock = "";
         
-//        textBlock = """
-//                           Formatted text block text
-//                           Every line is aligned
-//                           This is important in keeping everything aligned
-//              As you can see, this misalignement changes everything!
-//                           """;
+        textBlock = """
+                           Formatted text block text
+                           Every line is aligned
+                           This is important in keeping everything aligned
+              As you can see, this misalignement changes everything!
+                           """;
 
         return textBlock;
     }
@@ -31,8 +31,8 @@ public class MultiLineTest {
     private static String getEmptyMultiLine() {
         String textBlock = "";
         
-//        textBlock = """
-//                    """;
+        textBlock = """
+                    """;
 
         return textBlock;
     }
@@ -40,13 +40,13 @@ public class MultiLineTest {
     private static String getHtmlCode() {
         String textBlock = "";
         
-//        textBlock = """
-//        <html>
-//          <body>
-//              <p>Welcome page</p>
-//          </body>
-//        </html>
-//        """;
+        textBlock = """
+        <html>
+          <body>
+              <p>Welcome page</p>
+          </body>
+        </html>
+        """;
         
         return textBlock;
     }
@@ -55,11 +55,11 @@ public class MultiLineTest {
         String textBlock = "";
         
         // Mix and match text blocks with traditional code
-//        textBlock = "public void print(Object object) {\n" +
-//                    """
-//                      System.out.println(Objects.toString(object));
-//                    }
-//                    """;
+        textBlock = "public void print(Object object) {\n" +
+                    """
+                      System.out.println(Objects.toString(object));
+                    }
+                    """;
         
         return textBlock;
     }
@@ -67,10 +67,10 @@ public class MultiLineTest {
     private static String getWithoutLineFeed() {
         String textBlock = "";
 
-//        textBlock =  """
-//				line 1
-//				line 2
-//				line 3 """; // OK - No line feed on last line
+        textBlock =  """
+				line 1
+				line 2
+				line 3 """; // OK - No line feed on last line
 
         return textBlock + "|";
     }
@@ -78,8 +78,8 @@ public class MultiLineTest {
     private static String getEmptyLine() {
         String emptyLine = "";
         
-//        emptyLine = """
-//                    """;      // OK - Empty line
+        emptyLine = """
+                    """;      // OK - Empty line
 
         return emptyLine;
     }
