@@ -3,6 +3,7 @@ package chap05;
 import java.util.*;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -10,6 +11,7 @@ import java.util.stream.Stream;
 public class StreamCollectors {
 
     private static List<String> testToCollection(List<String> data) {
+        // Creates a new list from the data stream
         return data.stream().collect(Collectors.toCollection(ArrayList<String>::new));
     }
 
@@ -24,14 +26,17 @@ public class StreamCollectors {
     }
 
     private static double testAverageWithFiltering(List<String> data) {
+        // Find the average length of string containing the word "Java"
         return data.stream().collect(Collectors.filtering(s -> s.contains("Java"), Collectors.averagingInt(String::length)));
     }
 
     private static double testCounting(List<String> data) {
+        // Count the number of stream elements
         return data.stream().collect(Collectors.counting());
     }
 
     private static double testFlatMapping(List<String> data) {
+        // Stream each element twice and count the elements
         return data.stream().collect(Collectors.flatMapping(s -> Stream.of(s, s), Collectors.counting()));
     }
 
@@ -72,38 +77,37 @@ public class StreamCollectors {
         // In this example, it will return all strings that contain the word "Java" or "Oracle" once (does not return the same string multiple times).
 
         // Only available in Java 12
-//        Collector<String, ?, List<String>> filteringJavaCollector = Collectors.filtering(s -> s.contains("Java"), Collectors.toList());
-//        Collector<String, ?, List<String>> filteringOracleCollector = Collectors.filtering(s -> s.contains("Oracle"), Collectors.toList());
-//        BinaryOperator<List<String>> unique = (list1, list2) -> {
-//            list1.addAll(list2);
-//            return list1.stream().distinct().collect(Collectors.toList());
-//        };
-//
-//        return data.stream().collect(Collectors.teeing(filteringJavaCollector, filteringOracleCollector, unique));
+        Collector<String, ?, List<String>> filteringJavaCollector = Collectors.filtering(s -> s.contains("Java"), Collectors.toList());
+        Collector<String, ?, List<String>> filteringOracleCollector = Collectors.filtering(s -> s.contains("Oracle"), Collectors.toList());
+        BinaryOperator<List<String>> unique = (list1, list2) -> {
+            list1.addAll(list2);
+            return list1.stream().distinct().collect(Collectors.toList());
+        };
 
-        return Collections.emptyList();
+        return data.stream().collect(Collectors.teeing(filteringJavaCollector, filteringOracleCollector, unique));
     }
 
     public static void main(String... args) {
         List<String> list = Arrays.asList("Short string",
                                           "Slightly longer string with numbers 123",
-                                          "Java 12, released in March 2019, is the latest version of Java",
+                                          "Java 13, released in September 2019, is the latest version of Java",
                                           "OpenJDK is the open source version of Java",
                                           "Starting from version 11, Oracle has changed the licensing for Java - it will no longer be free");
 
-        System.out.println(testToCollection(list));
-        System.out.println(testAverage(list));
-        System.out.println(testAverageWithFinisher(list));
-        System.out.println(testAverageWithFiltering(list));
-        System.out.println(testCounting(list));
-        System.out.println(testFlatMapping(list));
+        System.out.println("TestToCollection: " + testToCollection(list));
+        System.out.println("TestAverage: " + testAverage(list));
+        System.out.println("TestAverageWithFinisher: " + testAverageWithFinisher(list));
+        System.out.println("TestAverageWithFiltering: " + testAverageWithFiltering(list));
+        System.out.println("TestCounting: " + testCounting(list));
+        System.out.println("TestFlatMapping: " + testFlatMapping(list));
 
         testGroupingBy(list).entrySet().forEach(e -> System.out.println("Key: " + e.getKey() + " Value: " + e.getValue()));
 
-        System.out.println(testJoining(list));
-        System.out.println(testMapping(list));
-        testToMap(list).entrySet().forEach(e -> System.out.println("Key: " + e.getKey() + " Value: " + e.getValue()));
-        testPartitioning(list).entrySet().forEach(e -> System.out.println("Key: " + e.getKey() + " Value: " + e.getValue()));
+        System.out.println("TestJoining: " + testJoining(list));
+        System.out.println("TestMapping: " + testMapping(list));
+        testToMap(list).entrySet().forEach(e -> System.out.println("TestToMap Key: " + e.getKey() + " Value: " + e.getValue()));
+        testPartitioning(list).entrySet().forEach(e -> System.out.println("TestPartitioning Key: " + e.getKey() + " Value: " + e.getValue()));
+        System.out.println("TestTeeing");
         testTeeing(list).forEach(System.out::println);
     }
 }
