@@ -18,7 +18,7 @@ public class StreamedPrimeNumberFinder {
                 parallel().
                 filter(i -> i > 1).
                 filter(i -> IntStream.rangeClosed(2, (int) Math.sqrt(i)).noneMatch(innerI -> i % innerI == 0)).
-                forEachOrdered(i -> System.out.println(" - " + i));
+                forEachOrdered(i -> System.out.println(" - " + i)); // Keeps the order in a parallel stream
     }
 
     public static void main(String[] args) {
