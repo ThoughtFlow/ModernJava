@@ -60,16 +60,16 @@ public class SwitchTests {
 
         // Java 13 switch statements also introduce yield statement that "break" out of each case statement.
         // Yields must return a value and each case must return a yield.
-//        dayType = switch (day) {
-//            case FRIDAY, SATURDAY, SUNDAY:
-//                yield "Fun day";
-//            case WEDNESDAY:
-//                yield "Hump day";
-//            case MONDAY, TUESDAY, THURSDAY:
-//                yield "Blah day";
-//            default:
-//                yield "Unknown value";
-//        };
+        dayType = switch (day) {
+            case FRIDAY, SATURDAY, SUNDAY:
+                yield "Fun day";
+            case WEDNESDAY:
+                yield "Hump day";
+            case MONDAY, TUESDAY, THURSDAY:
+                yield "Blah day";
+            default:
+                yield "Unknown value";
+        };
 
         return dayType;
     }
