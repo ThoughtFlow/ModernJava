@@ -24,7 +24,7 @@ public class MultiLineTest {
                            Formatted text block text
                            Every line is aligned
                            This is important in keeping everything aligned
-              As you can see, this misalignement changes everything!
+              As you can see, this misalignment changes everything!
                            """;
 
         return textBlock;
