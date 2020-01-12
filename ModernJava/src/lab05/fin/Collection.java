@@ -89,7 +89,7 @@ public class Collection {
         System.out.println("Songs containing the word \"Love\":");
         found.getOrDefault(true, Collections.emptyList()).forEach(s -> System.out.println(" - " + s));
 
-        System.out.println("Dictionary of words and occurences in songs: ");
+        System.out.println("Dictionary of words and occurrences in songs: ");
         getWordDictionary(topCountrySongs).entrySet().forEach((e -> System.out.println(" - " + e.getKey() + ": " + e.getValue())));
     }
 }
