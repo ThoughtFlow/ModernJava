@@ -5,7 +5,6 @@ public class MultiLineTest {
     private static String getAlignedMultiLine() {
         String textBlock = "";
 
-        // Java 13 only
         textBlock = """
                            Formatted text block text
                            Every line is aligned
@@ -19,7 +18,6 @@ public class MultiLineTest {
     private static String getMisalignedMultiLine() {
         String textBlock = "";
         
-        // Java 13 only
         textBlock = """
                            Formatted text block text
                            Every line is aligned
@@ -33,7 +31,6 @@ public class MultiLineTest {
     private static String getEmptyMultiLine() {
         String textBlock = "";
         
-        // Java 13 only
         textBlock = """
                     """;
 
@@ -43,7 +40,6 @@ public class MultiLineTest {
     private static String getHtmlCode() {
         String textBlock = "";
         
-        // Java 13 only
         textBlock = """
         <html>
           <body>
@@ -58,7 +54,6 @@ public class MultiLineTest {
     private static String generateJavaCode() {
         String textBlock = "";
         
-        // Java 13 only
         // Mix and match text blocks with traditional code
         textBlock = "public void print(Object object) {\n" +
                     """
@@ -72,7 +67,6 @@ public class MultiLineTest {
     private static String getWithoutLineFeed() {
         String textBlock = "";
 
-        // Java 13 only
         textBlock =  """
 				line 1
 				line 2
@@ -84,7 +78,6 @@ public class MultiLineTest {
     private static String getEmptyLine() {
         String emptyLine = "";
         
-        // Java 13 only
         emptyLine = """
                     """;      // OK - Empty line
 

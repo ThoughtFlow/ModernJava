@@ -55,6 +55,6 @@ public class RecordTests {
     /**
      * Record defined as inner record.
      */
-    private static record NameHolder(String firstName, String lastName) {
+    private record NameHolder(String firstName, String lastName) {
     }
 }
