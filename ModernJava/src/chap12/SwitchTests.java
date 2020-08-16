@@ -36,7 +36,7 @@ public class SwitchTests {
     }
 
     private static String getDayType(Day day) {
-        // Java 13 switch expressions
+        // Java switch expressions
         return switch (day) {
             case FRIDAY, SATURDAY, SUNDAY -> "Fun day";
             case WEDNESDAY -> "Hump day";
@@ -46,7 +46,7 @@ public class SwitchTests {
     }
 
     private static void printDayType(Day day) {
-        // Java 13 switch statements need not return values.
+        // Java switch statements need not return values.
         switch (day) {
             case FRIDAY, SATURDAY, SUNDAY  -> System.out.println(day + " is Fun day");
             case WEDNESDAY                 -> System.out.println(day + " is Hump day");
@@ -58,7 +58,7 @@ public class SwitchTests {
     private static String getDayTypeWithYield(Day day) {
         String dayType = "";
 
-        // Java 13 switch statements also introduce yield statement that "break" out of each case statement.
+        // Java switch statements also introduce yield statement that "break" out of each case statement.
         // Yields must return a value and each case must return a yield.
         dayType = switch (day) {
             case FRIDAY, SATURDAY, SUNDAY:
