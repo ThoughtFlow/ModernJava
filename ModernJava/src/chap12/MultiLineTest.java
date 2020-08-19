@@ -95,6 +95,29 @@ public class MultiLineTest {
 //        """;          // unescaped backslash
     }
 
+    private static String getNoNewLineWithSpace() {
+        // \s translates into a single space instead of newline
+        String colors = """
+            red  
+            green\s
+            blue \s
+            """;
+
+        return colors;
+    }
+
+    private static String getNoNewLine() {
+        //  suppresses the newline character
+        String text = """
+                Lorem ipsum dolor sit amet, consectetur adipiscing \
+                elit, sed do eiusmod tempor incididunt ut labore \
+                et dolore magna aliqua.\
+                """;
+
+        return text;
+    }
+
+
     public static void main(String... args) {
         System.out.println("==================================================");
         System.out.println("Aligned text block");
@@ -130,5 +153,15 @@ public class MultiLineTest {
         System.out.println("Get empty line");
         System.out.println("==================================================");
         System.out.println(getEmptyLine());
+
+        System.out.println("==================================================");
+        System.out.println("Get no new line with spaces");
+        System.out.println("==================================================");
+        System.out.println(getNoNewLineWithSpace());
+
+        System.out.println("==================================================");
+        System.out.println("Get no new line");
+        System.out.println("==================================================");
+        System.out.println(getNoNewLine());
     }
 }
