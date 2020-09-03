@@ -10,15 +10,15 @@ public class Client {
         UrlFetcher fetcher = UrlFetcherFactory.getFetcher();
 
         System.out.println("===================================");
-        fetcher.getPage("https://www.google.com", Durability.SHORT).forEach(System.out::println);
+        fetcher.getPage("http://www.google.com", Durability.SHORT).forEach(System.out::println);
 
         System.out.println("===================================");
-        fetcher.getPage("https://www.google.com", Durability.SHORT).forEach(System.out::println);
+        fetcher.getPage("http://www.google.com", Durability.SHORT).forEach(System.out::println);
 
         System.out.println("===================================");
-        fetcher.getPage("https://www.wikipedia.org", Durability.LONG).forEach(System.out::println);
+        fetcher.getPage("http://www.wikipedia.org", Durability.LONG).forEach(System.out::println);
 
         System.out.println("===================================");
-        fetcher.getPage("https://www.wikipedia.org", Durability.LONG).forEach(System.out::println);
+        fetcher.getPage("http://www.wikipedia.org", Durability.LONG).forEach(System.out::println);
     }
 }
