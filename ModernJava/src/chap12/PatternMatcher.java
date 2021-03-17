@@ -47,12 +47,12 @@ public class PatternMatcher {
     }
 
     public static void main(String... args) {
-        System.out.println(getFormattedValue("Java SE 14"));
-        System.out.println(getFormattedValue(14));
-        System.out.println(getFormattedValue(14L));
+        System.out.println(getFormattedValue("Java SE 15"));
+        System.out.println(getFormattedValue(15));
+        System.out.println(getFormattedValue(15L));
 
         try {
-            System.out.println(getFormattedValue(14.0));
+            System.out.println(getFormattedValue(15.0));
         }
         catch (IllegalArgumentException e) {
             System.out.println("As expected, unsupported type: (" + e.getMessage() + ")");

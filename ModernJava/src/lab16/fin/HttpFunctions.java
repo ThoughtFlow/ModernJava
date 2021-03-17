@@ -134,20 +134,20 @@ public class HttpFunctions {
         responseConsumer.accept(postResponseToFileFunction.apply(urlString));
     }
 
-    private static void printSeperator() {
+    private static void printSeparator() {
         System.out.println("================================");
     }
 
     public static void main(String... args) {
         getBodyAsString("http://www.oracle.com/technetwork/java/index.html");
 
-        printSeperator();
+        printSeparator();
         getBodyAsString("https://www.oracle.com/technetwork/java/index.html");
 
-        printSeperator();
+        printSeparator();
         getBodyAsStream("https://www.oracle.com/technetwork/java/index.html");
 
-        printSeperator();
+        printSeparator();
         postResponseToFile("http://httpbin.org/post", "/tmp/download.txt"); // use a different path for Windows
     }
 }
