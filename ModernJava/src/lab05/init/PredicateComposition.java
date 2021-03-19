@@ -75,7 +75,7 @@ public class PredicateComposition
             return false;
         };
 
-    	// Compose the lambdas into one
+    	// todo Compose the lambdas into one
         Predicate<Double[]> hasPassed = isAllPassed.and(isBAverage).or(isLastPerfect).and(isAnyMissed.negate());
         runTest(hasPassed);
     }

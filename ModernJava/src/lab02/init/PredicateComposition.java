@@ -42,13 +42,13 @@ public class PredicateComposition
     @SuppressWarnings("unused")
     public static void main(String[] args)
     {
-        // Implement these four independent lambdas here:
+        // todo Implement these four independent lambdas here:
         Predicate<Double[]> isAllPassed = scores -> false;
         Predicate<Double[]> isBAverage = scores -> false;
         Predicate<Double[]> isLastPerfect = scores -> false;
         Predicate<Double[]> isAnyMissed = scores -> false;
 
-        // Compose the lambdas into one
+        // todo Compose the lambdas into one
         Predicate<Double[]> hasPassed = scores -> false;
 
         runTest(hasPassed);

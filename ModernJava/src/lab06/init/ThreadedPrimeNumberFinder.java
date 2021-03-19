@@ -16,7 +16,7 @@ public class ThreadedPrimeNumberFinder {
 	 */
 	private static int countPrimes(int range) throws InterruptedException, ExecutionException {
 
-		// Make this multi-threaded using the executor service.
+		// todo Make this multi-threaded using the executor service.
 		// Change this to executor service with callback and futures.
 		// 1) Choose the appropriate executor service and mind the pool size
 		// 2) Use submit/invoke, call and future, then shutdown the pool.

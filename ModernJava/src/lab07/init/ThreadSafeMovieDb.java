@@ -21,7 +21,7 @@ public class ThreadSafeMovieDb implements MovieDb {
 
 		Movie movieToAdd = new Movie(categories, name, yearReleased);
 
-		// Protect multi-threaded access to database
+		// todo Protect multi-threaded access to database
 		categories.forEach(category -> {
 			database.computeIfAbsent(category, k -> new LinkedList<Movie>());
 			database.compute(category, (k, v) -> {v.add(movieToAdd); return v;});
@@ -31,7 +31,7 @@ public class ThreadSafeMovieDb implements MovieDb {
 	@Override
 	public void add(Category category, String name, Integer yearReleased) {
 
-		// Protect multi-threaded access to database
+		// todo Protect multi-threaded access to database
 		Set<Category> categories = new HashSet<>();
 		categories.add(category);
 		add(categories, name, yearReleased);
@@ -43,7 +43,7 @@ public class ThreadSafeMovieDb implements MovieDb {
 
 		Consumer<Movie> consumer = nextTitle -> {if (nextTitle.getName().equals(name)) foundMovie.set(nextTitle);};
 		
-		// Protect multi-threaded access to database
+		// todo Protect multi-threaded access to database
 		database.values().forEach(nextList -> nextList.forEach(consumer));
 
 		return foundMovie.get();
@@ -67,7 +67,7 @@ public class ThreadSafeMovieDb implements MovieDb {
 		final boolean existedBeforeDelete = findByName(name) != null;
 		Predicate<Movie> p = movie -> movie.getName().equals(name);
 
-		// Protect multi-threaded access to database
+		// todo Protect multi-threaded access to database
 		database.values().forEach(list -> list.removeIf(p));
 
 		return existedBeforeDelete;

@@ -7,7 +7,7 @@ public class StreamFun {
 		// Print only even numbers
 		System.out.println("Printing even numbers from 0 to " + range + "...");
 
-		// ### Implement stream ###
+		// todo ### Implement stream ###
 		System.out.println("Printing even numbers from 0 to " + range + "...Done");
 	}
 
@@ -15,13 +15,13 @@ public class StreamFun {
 		// Print the sum of odd numbers from 0 to 100
 		System.out.print("The sum of odd numbers from 0 to " + range + " is: ");
 
-		// ### Implement stream ###
+		// todo ### Implement stream ###
 		System.out.println("???");
 	}
 
 	private static void printSmallestIntForFactorial(int factorial) {
 		// Find the smallest int whose factorial is >= factorial
-		// ### Implement stream ###
+		// todo ### Implement stream ###
 		int smallestInt = 0;
 
 		System.out.println("Smallest int whose factorial is >= " + factorial + " is: " + smallestInt);

@@ -19,8 +19,8 @@ public class PromiseLinkScraper {
 	 */
 	private static Map<String, Integer> invoke(List<String> urls) throws InterruptedException, ExecutionException {
 		
-		// Implement this method as a promise
-		// Use Util.scrapeHrefs(), Util.catalog() and Util.merge()
+		// todo Implement this method as a promise
+		// todo Use Util.scrapeHrefs(), Util.catalog() and Util.merge()
 		
 		return new ConcurrentHashMap<String, Integer>();
 	}

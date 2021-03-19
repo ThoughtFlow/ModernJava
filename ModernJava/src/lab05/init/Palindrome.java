@@ -17,13 +17,13 @@ public class Palindrome
 
     private static List<String> findPalindrome(List<String> list)
     {
-    	// Implement this
+    	// todo Implement this
     	return Collections.emptyList();
     }
     
     private static List<String> findPalindromeKeepOriginal(List<String> list)
     {
-    	// Implement this
+    	// todo Implement this
     	return Collections.emptyList();
     }
     

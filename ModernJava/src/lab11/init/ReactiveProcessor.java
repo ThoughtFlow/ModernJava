@@ -38,13 +38,13 @@ public class ReactiveProcessor {
     public static void main(String[] args) {
         // Do with full range
         {
-            // Implement this function
+            // todo Implement this function
             Function<Flow.Subscriber<Integer>, List<Integer>> eventPublisher = null;
 
-            // Implement the flow subscriber and replace the null
+            // todo Implement the flow subscriber and replace the null
             List<Integer> droppedNumbers = eventPublisher.apply(null /* ###Implement me###*/);
 
-            // Implement a method in subscriber that will return the processed numbers.
+            // todo Implement a method in subscriber that will return the processed numbers.
             List<Integer> processedNumbers = null; // ###Implement me###
 
             verify(droppedNumbers, processedNumbers);
@@ -52,13 +52,13 @@ public class ReactiveProcessor {
 
         // Do again with errors
         {
-            // Implement this function
+            // todo Implement this function
             Function<Flow.Subscriber<Integer>, List<Integer>> eventPublisher = null;
 
-            // Implement the flow subscriber and replace the null
+            // todo Implement the flow subscriber and replace the null
             List<Integer> droppedNumbers = eventPublisher.apply(null /* ###Implement me###*/);
 
-            // Implement a method in subscriber that will return the processed numbers.
+            // todo Implement a method in subscriber that will return the processed numbers.
             List<Integer> processedNumbers = null; // ###Implement me###
 
             verify(droppedNumbers, processedNumbers);

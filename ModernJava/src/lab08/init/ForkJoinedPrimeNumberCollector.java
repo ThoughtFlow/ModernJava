@@ -26,7 +26,7 @@ public class ForkJoinedPrimeNumberCollector {
         @Override
         public void compute() {
 
-            // Refactor this method so that the work is divided into smaller chunks of 1000 elements.
+            // todo Refactor this method so that the work is divided into smaller chunks of 1000 elements.
             // Use fork and join
             for (int primeIndex = startRange; primeIndex <= endRange; ++primeIndex) {
                 collector[primeIndex] = Util.isPrime(primeIndex);

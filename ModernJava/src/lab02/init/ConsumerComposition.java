@@ -6,9 +6,9 @@ public class ConsumerComposition {
 
 	public static void main(String... args) {
 		
-		// Define functions here
+		// todo Define functions here
 		
-		// Compose here
+		// todo Compose here
 		Consumer<String> superPrint = s -> {}; // implement consumer composition
 		
 		superPrint.accept("This is a normal line and will only be printed to stdout");

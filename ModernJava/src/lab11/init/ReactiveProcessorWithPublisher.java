@@ -107,10 +107,10 @@ public class ReactiveProcessorWithPublisher {
         {
             Function<Flow.Subscriber<Integer>, List<Integer>> eventPublisher = ReactiveProcessorWithPublisher::publishEvents;
 
-            // Implement the subscriber
+            // todo Implement the subscriber
             List<Integer> droppedNumbers = eventPublisher.apply(null /* ###Implement me###*/);
 
-            // Implement a method in subscriber that will return the processed numbers.
+            // todo Implement a method in subscriber that will return the processed numbers.
             List<Integer> processedNumbers = null; // ###Implement me### 
 
             verify(droppedNumbers, processedNumbers);
@@ -120,10 +120,10 @@ public class ReactiveProcessorWithPublisher {
         {
             Function<Flow.Subscriber<Integer>, List<Integer>> eventPublisher = ReactiveProcessorWithPublisher::publishEventsWithError;
 
-            // Implement the subscriber
+            // todo Implement the subscriber
             List<Integer> droppedNumbers = eventPublisher.apply(null /* ###Implement me###*/);
 
-            // Implement a method in subscriber that will return the processed numbers.
+            // todo Implement a method in subscriber that will return the processed numbers.
             List<Integer> processedNumbers = null; // ###Implement me### 
 
             verify(droppedNumbers, processedNumbers);

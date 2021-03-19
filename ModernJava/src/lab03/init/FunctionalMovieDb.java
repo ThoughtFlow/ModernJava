@@ -15,7 +15,7 @@ public class FunctionalMovieDb implements MovieDb {
 	@Override
 	public void add(Set<Category> categories, String name, Integer yearReleased) {
 
-		// Implement this
+		// todo Implement this
 	}
 	
 	@Override
@@ -30,21 +30,21 @@ public class FunctionalMovieDb implements MovieDb {
 	@Override
 	public Movie findByName(String name) {
 		
-		// Implement this
+		// todo Implement this
 		return null;
 	}
 	
 	@Override
 	public List<String> findByCategory(Category category) {
 		
-		// Implement this
+		// todo Implement this
 		return new ArrayList<>();
 	}
 
 	@Override
 	public boolean delete(String name) {
 		
-		// Implement this
+		// todo Implement this
 		return false;
 	}
 }

@@ -140,10 +140,10 @@ public class MessageComposition {
 
 	public static void main(String[] args) throws IOException {
 		
-		// Implement the writingFunction that will obfuscate, compress and encrypt.
+		// todo Implement the writingFunction that will obfuscate, compress and encrypt.
 		Supplier<Function<List<String>, List<String>>> writingFunction = () -> Function.identity();
 		
-		// Implement the readingFunction that will decode and decrypt.
+		// todo Implement the readingFunction that will decode and decrypt.
 		Supplier<Function<List<String>, List<String>>> readingFunction = () -> Function.identity();
 
 		writeAndRead(writingFunction, readingFunction);

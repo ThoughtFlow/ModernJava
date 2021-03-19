@@ -62,7 +62,7 @@ public class SpliteratorPrimeNumberFinder {
 
     public static void main(String[] args) {
 
-        // Implement this function that returns a list of Spliterators for Integers
+        // todo Implement this function that returns a list of Spliterators for Integers
         // Input: The list of integers to test for primeness
         // Output: The list of spliterators of integers representing the range to process
         Function<List<Integer>, List<Spliterator<Integer>>> spliteratorCreator = integerList -> {
@@ -70,7 +70,7 @@ public class SpliteratorPrimeNumberFinder {
             return new ArrayList<Spliterator<Integer>>();
         };
 
-        // Implement this function that returns the number of primes found in the spliterator data
+        // todo Implement this function that returns the number of primes found in the spliterator data
         // Input: The spliterator of integers to process
         // Output: The number of primes found in the spliterator
         Function<Spliterator<Integer>, Integer> primeCounter = spliterator -> {

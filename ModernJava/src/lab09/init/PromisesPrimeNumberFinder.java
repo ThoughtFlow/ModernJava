@@ -13,7 +13,7 @@ public class PromisesPrimeNumberFinder {
 	 * @return A promise that is ready to be executed.
 	 */
 	private static CompletableFuture<Integer> createPromise(int numberOfRanges, int rangeSize) {
-		// Implement this
+		// todo Implement this
 		return CompletableFuture.completedFuture(0);
 	}
 	
@@ -25,7 +25,7 @@ public class PromisesPrimeNumberFinder {
 	 * @return A promise that is ready to be executed.
 	 */
 	private static CompletableFuture<Integer> createPromiseWithException(int numberOfRanges, int rangeSize) {
-		// Implement this
+		// todo Implement this
 		return CompletableFuture.completedFuture(0);
 	}
 	

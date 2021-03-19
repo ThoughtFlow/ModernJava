@@ -10,17 +10,17 @@ import java.util.Map;
 public class Collection {
 
     private static Double getAverageWithFilter(List<String> list, String searchWord) {
-        // Implement this
+        // todo Implement this
         return 0d;
     }
 
     private static Map<Boolean, List<String>> getLinesWithWord(List<String> list, String searchWord) {
-        // Implement this
+        // todo Implement this
         return new HashMap<>();
     }
 
     private static Map<String, Integer> getWordDictionary(List<String> list) {
-        // Implement this
+        // todo Implement this
         return new HashMap<>();
     }
 

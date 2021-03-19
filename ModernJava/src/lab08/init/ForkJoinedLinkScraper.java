@@ -43,7 +43,7 @@ public class ForkJoinedLinkScraper {
 		private final List<String> hrefs;
 
 		private LinkCatalogTask(List<String> hrefs) {
-			// Add any other parameters
+			// @todo Add any other parameters
 			this.hrefs = hrefs;
 		}
 
@@ -52,7 +52,7 @@ public class ForkJoinedLinkScraper {
 
 			Map<String, Integer> catalog;
 
-			// Implement this: Do forking and joining here
+			// todo Implement this: Do forking and joining here
 			catalog = Util.catalog(hrefs);
 
 			// Use merge to merge all forked catalogs into 1

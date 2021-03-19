@@ -11,7 +11,7 @@ public class StreamedPrimeNumberFinder {
 
     private static void printPrimes(int start, int end, IntConsumer peeker) {
 
-        // Implement this: Change this stream to run in parallel and keep the order
+        // todo Implement this: Change this stream to run in parallel and keep the order
         System.out.println("List of prime numbers (in order): ");
         IntStream.rangeClosed(start, end).
                 peek(peeker).

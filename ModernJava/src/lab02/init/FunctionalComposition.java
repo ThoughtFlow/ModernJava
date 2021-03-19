@@ -6,13 +6,13 @@ public class FunctionalComposition
 {
     public static void main(String... args)
     {
-    	// Define the 4 functions here
+    	// todo Define the 4 functions here
 
-        // Compose using andThen()
+        // todo Compose using andThen()
     	Function<Integer, Integer> full = x -> x; // implement this
         System.out.println(full.apply(3));
 
-        // Compose using compose()
+        // todo Compose using compose()
     	full = x -> x; // implement this
         System.out.println(full.apply(3));
     }

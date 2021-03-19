@@ -23,7 +23,7 @@ public class ForkJoinedPrimeNumberFinder {
 		@Override
 		public Integer compute() {
 
-            // Refactor this method so that the work is divided into smaller chunks of 1000 elements.
+            // todo Refactor this method so that the work is divided into smaller chunks of 1000 elements.
             // Use fork and join
 			int count = 0;
 
