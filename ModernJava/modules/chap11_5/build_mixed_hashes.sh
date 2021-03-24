@@ -30,4 +30,4 @@ jmod describe /tmp/chap11_5/jmods/com.red30tech.movement.jmod
 jmod describe /tmp/chap11_5/jmods2/com.red30tech.movement.jmod
 
 #Jlink
-jlink --module-path $JAVA_HOME/jmods:/tmp/chap11_5/jmods2/com.red30tech.movement.jmod:/tmp/chap11_5/jmods/com.red30tech.axle.jmod:/tmp/chap11_5/jmods/com.red30tech.chassis.jmod:/tmp/chap11_5/jmods/com.red30tech.airbag.jmod:/tmp/chap11_5/jmods/com.red30tech.driver.jmod --add-modules com.red30tech.driver --output jlink --launcher run=com.red30tech.driver/com.red30tech.driver.TestDriver
+jlink --module-path $JAVA_HOME/jmods:/tmp/chap11_5/jmods2/com.red30tech.movement.jmod:/tmp/chap11_5/jmods/com.red30tech.axle.jmod:/tmp/chap11_5/jmods/com.red30tech.chassis.jmod:/tmp/chap11_5/jmods/com.red30tech.airbag.jmod:/tmp/chap11_5/jmods/com.red30tech.driver.jmod --add-modules com.red30tech.driver --output /tmp/chap11_5/jlink --launcher run=com.red30tech.driver/com.red30tech.driver.TestDriver
