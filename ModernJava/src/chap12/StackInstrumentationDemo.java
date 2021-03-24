@@ -16,7 +16,7 @@ public class StackInstrumentationDemo {
     public static void main(String... args) {
         walkingTest();
 
-        StackWalkerInstrumenter.initialize(ClassC.class);
+        StackWalkerInstrumenter.instrumentClass(ClassC.class);
         ClassA.methodA(5);
         ClassB.methodB(5);
         ClassC.methodC(25);

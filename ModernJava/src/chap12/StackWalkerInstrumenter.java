@@ -13,7 +13,7 @@ public class StackWalkerInstrumenter {
     private final List<List<StackWalker.StackFrame>> stackFrameStore = new ArrayList<>();
     private final String instrumentationClassName;
 
-    public static void initialize(Class<?> instrumentationClass) {
+    public static void instrumentClass(Class<?> instrumentationClass) {
         if (singleInstance != null) {
             throw new IllegalStateException("Instance already created");
         }
