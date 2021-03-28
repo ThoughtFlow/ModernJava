@@ -36,10 +36,12 @@ public class SealedTest {
         int thisXPosition = rand.nextInt(8);
         int thisYPosition = rand.nextInt(8);
 
-        if (myPieces[thisXPosition][thisYPosition] == null ||
+        if (myPieces[thisXPosition][thisYPosition] != null &&
             myPieces[thisXPosition][thisYPosition].canMove(newXPosition, newYPosition, myPieces, opponentPieces)) {
 
             myPieces[newXPosition][newYPosition] = myPieces[thisXPosition][thisYPosition];
+            System.out.println("Moved " + myPieces[thisXPosition][thisYPosition] +
+                    " to " + newXPosition + ", " + newYPosition);
         }
 
     }
@@ -67,6 +69,12 @@ public class SealedTest {
             return color;
         }
 
+        abstract String getName();
+
+        public String toString() {
+            return getColor() + " " + getName();
+        }
+
         abstract boolean canMove(int newXPosition, int newYPosition,
                                  ChessPiece[][] pieces, ChessPiece[][] opponentPieces);
     }
@@ -76,6 +84,10 @@ public class SealedTest {
         public King(PieceColor color)
         {
             super(color);
+        }
+
+        String getName() {
+            return "King";
         }
 
         @Override
@@ -94,6 +106,11 @@ public class SealedTest {
         }
 
         @Override
+        String getName() {
+           return "Queen";
+        }
+
+        @Override
         boolean canMove(int newXPosition, int newYPosition,
                         ChessPiece[][] pieces, ChessPiece[][] opponentPieces) {
 
@@ -106,6 +123,11 @@ public class SealedTest {
         public Rook(PieceColor color)
         {
             super(color);
+        }
+
+        @Override
+        String getName() {
+            return "Rook";
         }
 
         @Override
@@ -123,6 +145,11 @@ public class SealedTest {
         }
 
         @Override
+        String getName() {
+            return "Bishop";
+        }
+
+        @Override
         boolean canMove(int newXPosition, int newYPosition,
                         ChessPiece[][] pieces, ChessPiece[][] opponentPieces) {
             return newXPosition < 8 && newXPosition >= 0 && newYPosition < 8 && newYPosition >= 0;
@@ -134,6 +161,11 @@ public class SealedTest {
         public Knight(PieceColor color)
         {
             super(color);
+        }
+
+        @Override
+        String getName() {
+            return "Knight";
         }
 
         @Override
@@ -150,6 +182,10 @@ public class SealedTest {
             super(color);
         }
 
+        @Override
+        String getName() {
+            return "Pawn";
+        }
         @Override
         boolean canMove(int newXPosition, int newYPosition,
                         ChessPiece[][] pieces, ChessPiece[][] opponentPieces) {
