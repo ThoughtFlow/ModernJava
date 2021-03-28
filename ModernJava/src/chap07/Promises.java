@@ -153,7 +153,7 @@ public class Promises {
                                 System.out.println(i);
                             }
                             else {
-                                System.err.println("An error occured");
+                                System.err.println("An error occurred");
                             }
                         });
 
