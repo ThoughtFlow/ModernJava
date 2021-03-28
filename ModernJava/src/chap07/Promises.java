@@ -160,6 +160,12 @@ public class Promises {
         System.out.println("Result: " + task4.get());
     }
 
+    private static void xxx() {
+        CompletableFuture<Integer> task1a = new CompletableFuture<>();
+        task1a.thenCombine()
+    }
+
+
 
     public static void main(String... args) throws InterruptedException, ExecutionException {
         promiseOne();
