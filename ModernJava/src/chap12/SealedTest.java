@@ -59,7 +59,7 @@ public class SealedTest {
     private enum PieceColor {White, Black};
 
     private static sealed abstract class ChessPiece permits King, Queen, Rook, Bishop, Knight, Pawn {
-        private PieceColor color;
+        private final PieceColor color;
 
         ChessPiece(PieceColor color) {
             this.color = color;
