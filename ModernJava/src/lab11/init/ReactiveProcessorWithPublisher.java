@@ -25,6 +25,7 @@ public class ReactiveProcessorWithPublisher {
     private static List<Integer> publishEvents(Flow.Subscriber<Integer> subscriber) {
         List<Integer> missedNumbers = new ArrayList<>();
 
+        System.out.println("Publishing events...");
         // SubmissionPublisher is an AutoClosable
         try (SubmissionPublisher<Integer> publisher =
                      new SubmissionPublisher<>(ForkJoinPool.commonPool(),	// Create a publisher using the common ForkJoinPool as the async framework.
@@ -41,7 +42,12 @@ public class ReactiveProcessorWithPublisher {
             });
         }
 
+        System.out.println("Publishing events...Done");
+
+        System.out.println("Waiting for subscribers...");
         sleep(10000);
+        System.out.println("Waiting for subscribers...Done");
+
         return missedNumbers;
     }
 
@@ -54,6 +60,7 @@ public class ReactiveProcessorWithPublisher {
     private static List<Integer> publishEventsWithError(Flow.Subscriber<Integer> subscriber) {
         List<Integer> missedNumbers = new ArrayList<>();
 
+        System.out.println("Publishing events...");
         // SubmissionPublisher is an AutoClosable
         try (SubmissionPublisher<Integer> publisher =
                      new SubmissionPublisher<>(ForkJoinPool.commonPool(),	// Create a publisher using the common ForkJoinPool as the async framework.
@@ -70,7 +77,11 @@ public class ReactiveProcessorWithPublisher {
             });
         }
 
+        System.out.println("Publishing events...Done");
+
+        System.out.println("Waiting for subscribers...");
         sleep(10000);
+        System.out.println("Waiting for subscribers...Done");
         return missedNumbers;
     }
 

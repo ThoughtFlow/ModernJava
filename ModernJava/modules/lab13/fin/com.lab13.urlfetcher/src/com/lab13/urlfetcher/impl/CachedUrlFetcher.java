@@ -46,6 +46,9 @@ public class CachedUrlFetcher implements UrlFetcher {
             }
             database.create(url, stream.collect(Collectors.toList()), durability);
         }
+        else {
+            System.out.println("Found in cache");
+        }
 
         List<String> list = database.get(url);
         return list.stream();
