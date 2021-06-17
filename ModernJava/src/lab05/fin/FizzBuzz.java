@@ -7,8 +7,6 @@ import java.util.stream.IntStream;
 
 import lab.util.BiHolder;
 
-import static lab.util.Util.logWithThread;
-
 public class FizzBuzz
 {
 	private static String divisibleOrNot(int divisibleInt, int modulo, Supplier<String> ifDivisible, Supplier<String> ifNotDivisible) {
@@ -37,12 +35,29 @@ public class FizzBuzz
 				collect(Collectors.toList());
 	}
 
+	private static List<String> getFizzBuzzListRecord(int start, int end) {
+
+		return IntStream.rangeClosed(start, end).
+				mapToObj(i -> new BiHolderRecord(i, "")).
+				map(h -> h.newResult(divisibleOrNot(h.candidateInt(), 3, () -> h.result() + "Fizz", h::result))).
+				map(h -> h.newResult(divisibleOrNot(h.candidateInt(), 5, () -> h.result() + "Buzz", h::result))).
+				filter(h -> h.result().length() > 0).
+				map(h -> h.candidateInt() + " " + h.result()).
+				collect(Collectors.toList());
+	}
     public static void main(String... args)
     {
         getFizzBuzzList(1, 100).forEach(System.out::println);
         getFizzBuzzListInParallel(1, 100).forEach(System.out::println);
-
+		getFizzBuzzListRecord(1, 100).forEach(System.out::println);
 
         System.out.println("Size: " + getFizzBuzzListInParallel(1, 10_000_000).size());
     }
+
+    private static record BiHolderRecord(Integer candidateInt, String result) {
+
+		public BiHolderRecord newResult(String newResult) {
+			return new BiHolderRecord(candidateInt(), newResult);
+		}
+	};
 }
