@@ -37,7 +37,7 @@ public class CachedUrlFetcher implements UrlFetcher {
      Stream<String> stream;
 
      if (database.get(url) == null) {
-         System.out.println("Not found in cache");
+         System.out.println("Not found in cache/database: " + url);
         try {
            stream = getReader(url).lines();
         } catch (IOException e) {
@@ -46,7 +46,7 @@ public class CachedUrlFetcher implements UrlFetcher {
         database.create(url, stream.collect(Collectors.toList()), durability);
      }
      else {
-         System.out.println("Found in cache");
+         System.out.println("Found in cache/database: " + url);
      }
 
      List<String> list = database.get(url);

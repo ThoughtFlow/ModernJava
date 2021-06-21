@@ -6,20 +6,20 @@ import java.util.function.Function;
 
 public class CurriedGrading
 {
-    private static Function<GradeCalcType, Function<List<Double>, Double>> curryingFunction = method -> {
+    private static final Function<GradeCalcType, Function<List<Double>, Double>> curryingFunction = method -> {
         Function<List<Double>, Double> func;
         switch (method)
         {
             case AVERAGE :
-                func = list -> list.stream().reduce(0d, (l, r) -> l + r) / list.size();
+                func = list -> list.stream().reduce(0d, Double::sum) / list.size();
                 break;
 
             case WORST :
-                func = list -> list.stream().min((l, r) -> l < r ? -1 : l > r ? 1 : 0).orElseGet(() -> 0d);
+                func = list -> list.stream().min(Double::compareTo).orElseGet(() -> 0d);
                 break;
 
             case BEST :
-                func = list -> list.stream().max((l, r) -> l < r ? -1 : l > r ? 1 : 0).orElseGet(() -> 0d);
+                func = list -> list.stream().max(Double::compareTo).orElseGet(() -> 0d);
                 break;
 
             default:

@@ -25,7 +25,7 @@ public class StreamFun {
 	private static void printSmallestIntForFactorial(int factorial) {
 		// Find the smallest int whose factorial is >= factorial
 		int smallestInt = IntStream.rangeClosed(1, 100).
-				filter(i -> IntStream.rangeClosed(1, i).reduce(1, (l, r) -> l * r) >= 1000000).
+				filter(i -> IntStream.rangeClosed(1, i).reduce(1, (l, r) -> l * r) >= 1_000_000).
 				findAny().
 				orElse(0);
 		System.out.println("Smallest int whose factorial is >= " + factorial + " is: " + smallestInt);

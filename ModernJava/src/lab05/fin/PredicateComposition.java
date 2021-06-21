@@ -42,7 +42,7 @@ public class PredicateComposition
     {
         Predicate<Double[]> isAllPassed = scores -> Arrays.stream(scores).allMatch(next -> next >= .60d);
 
-        Predicate<Double[]> isBAverage = scores -> (Arrays.stream(scores).reduce(0d, (prev, next) -> prev + next) / scores.length) > .8;
+        Predicate<Double[]> isBAverage = scores -> (Arrays.stream(scores).reduce(0d, Double::sum) / scores.length) > .8;
 
         Predicate<Double[]> isLastPerfect = scores -> scores[scores.length - 1] == 1;
         

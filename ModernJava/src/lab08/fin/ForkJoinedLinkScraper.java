@@ -108,9 +108,12 @@ public class ForkJoinedLinkScraper {
 
 		ForkJoinPool executor = ForkJoinPool.commonPool();
 		ForkJoinTask<List<String>> hrefs = executor.submit(new LinkScrapeTask(urls, 0, urls.size() - 1));
+
+		// This will block until the hrefs.get() is ready
 		ForkJoinTask<Map<String, Integer>> catalog = executor.submit(new LinkCatalogTask(hrefs.get(), 0, hrefs.get().size()));
 		executor.shutdown();
 
+		// This will block until the catalog.get() is ready
 		return catalog.get();
 	}
 
