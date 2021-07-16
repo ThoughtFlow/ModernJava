@@ -3,42 +3,33 @@ package lab20.fin;
 import java.io.Closeable;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.channels.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.ClosedSelectorException;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ChatServer implements Runnable, Closeable {
+public class ChatServerOld implements Runnable, Closeable {
 
     private static final String USAGE = "USAGE: ChatServer port";
     private static final String BYE_MESSAGE = "BYE";
-    private static final Logger logger = Logger.getLogger(ChatServer.class.getName());
+    private static final Logger logger = Logger.getLogger(ChatServerOld.class.getName());
 
     private final ChatRoomManager chatRoomManager = new ChatRoomManager();
     private final InetSocketAddress daemonAddress;
     private Selector selector;
 
-    private final IoFunction<InetSocketAddress, Selector> registerAcceptConnection;
-    private final IoFunction<SelectionKey, SocketChannel> acceptConnection;
-    private final IoFunction<SelectionKey, String> readFromSocket;
-    private final IoBiConsumer<SelectionKey, String> writeToSocket;
-
-    public ChatServer(InetSocketAddress daemonAddress,
-                      IoFunction<InetSocketAddress, Selector> registerAcceptConnection,
-                      IoFunction<SelectionKey, SocketChannel> acceptConnection,
-                      IoFunction<SelectionKey, String> readFromSocket,
-                      IoBiConsumer<SelectionKey, String> writeToSocket) {
-
+    public ChatServerOld(InetSocketAddress daemonAddress) {
         if (daemonAddress.isUnresolved()) {
             throw new IllegalArgumentException("Unresolved daemonAddress: " + daemonAddress);
         }
 
         this.daemonAddress = daemonAddress;
-        this.registerAcceptConnection = registerAcceptConnection;
-        this.acceptConnection = acceptConnection;
-        this.readFromSocket = readFromSocket;
-        this.writeToSocket = writeToSocket;
     }
 
     @Override
@@ -55,10 +46,15 @@ public class ChatServer implements Runnable, Closeable {
     }
 
     public void run() {
-        try {
-            selector = registerAcceptConnection.apply(daemonAddress);
+        try (ServerSocketChannel serverSocketChannel = ServerSocketChannel.open()) {
+
+            serverSocketChannel.configureBlocking(false);
+            serverSocketChannel.bind(daemonAddress);
 
             logger.info("Chat server is ready on port " + daemonAddress);
+            selector = Selector.open();
+
+            serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 
             while (selector.isOpen()) {
                 // This will block until a client connects
@@ -97,10 +93,10 @@ public class ChatServer implements Runnable, Closeable {
     }
 
     private void manageNewConnections(SelectionKey selectionKey) throws IOException {
-
-        SocketChannel socketChannel = acceptConnection.apply(selectionKey);
+        ServerSocketChannel serverSocketChannel = (ServerSocketChannel) selectionKey.channel();
+        SocketChannel socketChannel = serverSocketChannel.accept();
+        socketChannel.configureBlocking(false);
         SelectionKey clientSelectionKey = socketChannel.register(selectionKey.selector(), SelectionKey.OP_READ);
-
         UserData userData = new UserData(socketChannel, clientSelectionKey);
         sendGreetings(userData);
         clientSelectionKey.attach(userData);
@@ -108,10 +104,19 @@ public class ChatServer implements Runnable, Closeable {
 
     private void managingIncomingMessage(SelectionKey selectionKey) throws IOException {
 
-        String message = readFromSocket.apply(selectionKey);
+        ByteBuffer senderBuffer = ByteBuffer.allocate(2048);
+        SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
         UserData senderUserData = (UserData) selectionKey.attachment();
+        int bytesRead = socketChannel.read(senderBuffer);
 
-        if (message != null) {
+        if (bytesRead > 0) {
+            senderBuffer.flip();
+
+            byte[] bytes = new byte[bytesRead];
+            senderBuffer.get(bytes);
+            String message = new String(bytes, 0, bytesRead);
+            message = message.trim();
+            senderBuffer.clear();
 
             if (senderUserData.isUserIdAndTopicSet()) {
                 if (BYE_MESSAGE.equalsIgnoreCase(message)) {
@@ -131,11 +136,14 @@ public class ChatServer implements Runnable, Closeable {
     }
 
     private void manageOutgoingMessage(SelectionKey selectionKey) throws IOException {
-
+        ByteBuffer buffer = ByteBuffer.allocate(2048);
+        SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
         UserData userData = (UserData) selectionKey.attachment();
         String message = userData.getNextMessage();
+        buffer.put(message.getBytes());
+        buffer.flip();
+        socketChannel.write(buffer);
 
-        writeToSocket.accept(selectionKey, message);
         selectionKey.interestOps(SelectionKey.OP_READ);
     }
 
@@ -145,13 +153,8 @@ public class ChatServer implements Runnable, Closeable {
             chatRoomManager.addToChatRoom(enteringUserData.getChatRoom(), enteringUserData);
             int otherParticipants = chatRoomManager.getParticipants(enteringUserData.getChatRoom()) - 1;
 
-            String welcomeMessage =
-                    "Welcome to " + enteringUserData.getChatRoom() + "! There are " + otherParticipants + " other participant(s)\r\n" +
-                    "Type " + BYE_MESSAGE + " to exit\r\n";
+            String welcomeMessage = "Welcome to " + enteringUserData.getChatRoom() + "! There are " + otherParticipants + " other participant(s)\r\n";
             sendDirectMessage(enteringUserData, welcomeMessage);
-
-            welcomeMessage = enteringUserData.getUserId() + " has joined the chat room";
-            manageChatMessage(enteringUserData,  welcomeMessage);
         }
     }
 
@@ -192,46 +195,28 @@ public class ChatServer implements Runnable, Closeable {
         destinationUserData.getSelectionKey().interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
     }
 
-    private static void runServer(int port,
-                                  IoFunction<InetSocketAddress, Selector> registerAcceptConnection,
-                                  IoFunction<SelectionKey, SocketChannel> acceptConnection,
-                                  IoFunction<SelectionKey, String> readFromSocket,
-                                  IoBiConsumer<SelectionKey, String> writeToSocket) {
-
-
-        try {
-            final InetSocketAddress inetSocketAddress = new InetSocketAddress(port);
-            final ChatServer chatServer =
-                    new ChatServer(inetSocketAddress, registerAcceptConnection, acceptConnection,
-                                             readFromSocket, writeToSocket);
-
-            // start the server in its own thread
-            Thread serverThread = new Thread(chatServer);
-            serverThread.start();
-            serverThread.join();
-
-        } catch (InterruptedException exception) {
-            exception.printStackTrace();
-        }
-    }
-
     public static void main(String[] args) {
-
-        if (args.length == 1) {
+        if (args.length != 1) {
+            System.err.println(USAGE);
+        }
+        else {
             try {
                 final int port = Integer.parseInt(args[0]);
-                runServer(port, SocketFunctions.registerAcceptConnection,
-                                SocketFunctions.acceptConnection,
-                                SocketFunctions.readFromSocket,
-                                SocketFunctions.writeToSocket);
+                final InetSocketAddress inetSocketAddress = new InetSocketAddress(port);
+                final ChatServerOld chatServer = new ChatServerOld(inetSocketAddress);
+
+                // start the server in its own thread
+                Thread serverThread = new Thread(chatServer);
+                serverThread.start();
+                serverThread.join();
             }
             catch (NumberFormatException exception) {
                 System.err.println("Please enter a valid number for the port");
                 System.err.println(USAGE);
             }
-        }
-        else {
-            System.err.println(USAGE);
+            catch (InterruptedException exception) {
+                exception.printStackTrace();
+            }
         }
     }
 }

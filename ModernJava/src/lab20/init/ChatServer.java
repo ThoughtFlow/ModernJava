@@ -1,48 +1,47 @@
-package lab20.fin;
+package lab20.init;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
-import java.nio.channels.*;
+import java.nio.channels.ClosedSelectorException;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ChatServerFunctional implements Runnable, Closeable {
+public class ChatServer implements Runnable, Closeable {
 
     private static final String USAGE = "USAGE: ChatServer port";
     private static final String BYE_MESSAGE = "BYE";
-    private static final Logger logger = Logger.getLogger(ChatServerFunctional.class.getName());
+    private static final Logger logger = Logger.getLogger(ChatServer.class.getName());
 
     private final ChatRoomManager chatRoomManager = new ChatRoomManager();
     private final InetSocketAddress daemonAddress;
     private Selector selector;
 
-    private final IoFunction<InetSocketAddress, Selector> daemonProcessor;
-    private final IoFunction<SelectionKey, SocketChannel> newConnectionManager;
-    private final IoBiFunction<SocketChannel, SelectionKey, SelectionKey> readRegistrator;
-    private final IoFunction<SelectionKey, String> messageReader;
-    private final IoBiConsumer<SelectionKey, String> messageWriter;
+    private final IoFunction<InetSocketAddress, Selector> registerAcceptConnection;
+    private final IoFunction<SelectionKey, SocketChannel> acceptConnection;
+    private final IoFunction<SelectionKey, String> readFromSocket;
+    private final IoBiConsumer<SelectionKey, String> writeToSocket;
 
-    public ChatServerFunctional(InetSocketAddress daemonAddress,
-                                IoFunction<InetSocketAddress, Selector> daemonProcessor,
-                                IoFunction<SelectionKey, SocketChannel> newConnectionManager,
-                                IoBiFunction<SocketChannel, SelectionKey, SelectionKey> readRegistrator,
-                                IoFunction<SelectionKey, String> messageReader,
-                                IoBiConsumer<SelectionKey, String> messageWriter) {
+    public ChatServer(InetSocketAddress daemonAddress,
+                      IoFunction<InetSocketAddress, Selector> registerAcceptConnection,
+                      IoFunction<SelectionKey, SocketChannel> acceptConnection,
+                      IoFunction<SelectionKey, String> readFromSocket,
+                      IoBiConsumer<SelectionKey, String> writeToSocket) {
 
         if (daemonAddress.isUnresolved()) {
             throw new IllegalArgumentException("Unresolved daemonAddress: " + daemonAddress);
         }
 
         this.daemonAddress = daemonAddress;
-        this.daemonProcessor = daemonProcessor;
-        this.newConnectionManager = newConnectionManager;
-        this.readRegistrator = readRegistrator;
-        this.messageReader = messageReader;
-        this.messageWriter = messageWriter;
+        this.registerAcceptConnection = registerAcceptConnection;
+        this.acceptConnection = acceptConnection;
+        this.readFromSocket = readFromSocket;
+        this.writeToSocket = writeToSocket;
     }
 
     @Override
@@ -59,10 +58,10 @@ public class ChatServerFunctional implements Runnable, Closeable {
     }
 
     public void run() {
-
-        logger.info("Chat server is ready on port " + daemonAddress);
         try {
-            selector = daemonProcessor.apply(daemonAddress);
+            selector = registerAcceptConnection.apply(daemonAddress);
+
+            logger.info("Chat server is ready on port " + daemonAddress);
 
             while (selector.isOpen()) {
                 // This will block until a client connects
@@ -102,8 +101,8 @@ public class ChatServerFunctional implements Runnable, Closeable {
 
     private void manageNewConnections(SelectionKey selectionKey) throws IOException {
 
-        SocketChannel socketChannel = newConnectionManager.apply(selectionKey);
-        SelectionKey clientSelectionKey = readRegistrator.apply(socketChannel, selectionKey);
+        SocketChannel socketChannel = acceptConnection.apply(selectionKey);
+        SelectionKey clientSelectionKey = socketChannel.register(selectionKey.selector(), SelectionKey.OP_READ);
 
         UserData userData = new UserData(socketChannel, clientSelectionKey);
         sendGreetings(userData);
@@ -112,7 +111,7 @@ public class ChatServerFunctional implements Runnable, Closeable {
 
     private void managingIncomingMessage(SelectionKey selectionKey) throws IOException {
 
-        String message = messageReader.apply(selectionKey);
+        String message = readFromSocket.apply(selectionKey);
         UserData senderUserData = (UserData) selectionKey.attachment();
 
         if (message != null) {
@@ -139,7 +138,8 @@ public class ChatServerFunctional implements Runnable, Closeable {
         UserData userData = (UserData) selectionKey.attachment();
         String message = userData.getNextMessage();
 
-        messageWriter.accept(selectionKey, message);
+        writeToSocket.accept(selectionKey, message);
+        selectionKey.interestOps(SelectionKey.OP_READ);
     }
 
     private void manageUserEnteringChatRoom(UserData enteringUserData, String identification) {
@@ -195,83 +195,46 @@ public class ChatServerFunctional implements Runnable, Closeable {
         destinationUserData.getSelectionKey().interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
     }
 
+    private static void runServer(int port,
+                                  IoFunction<InetSocketAddress, Selector> registerAcceptConnection,
+                                  IoFunction<SelectionKey, SocketChannel> acceptConnection,
+                                  IoFunction<SelectionKey, String> readFromSocket,
+                                  IoBiConsumer<SelectionKey, String> writeToSocket) {
+
+
+        try {
+            final InetSocketAddress inetSocketAddress = new InetSocketAddress(port);
+            final ChatServer chatServer =
+                    new ChatServer(inetSocketAddress, registerAcceptConnection, acceptConnection,
+                                             readFromSocket, writeToSocket);
+
+            // start the server in its own thread
+            Thread serverThread = new Thread(chatServer);
+            serverThread.start();
+            serverThread.join();
+
+        } catch (InterruptedException exception) {
+            exception.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
 
-        IoFunction<InetSocketAddress, Selector> daemonProcessor = daemonAddress -> {
-                ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
-
-                serverSocketChannel.configureBlocking(false);
-                serverSocketChannel.bind(daemonAddress);
-
-                Selector selector = Selector.open();
-
-                serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
-
-                return selector;
-        };
-
-        IoFunction<SelectionKey, SocketChannel> newConnectionManager = selectionKey -> {
-            ServerSocketChannel serverSocketChannel = (ServerSocketChannel) selectionKey.channel();
-            SocketChannel socketChannel = serverSocketChannel.accept();
-            socketChannel.configureBlocking(false);
-
-            return socketChannel;
-
-        };
-
-        IoBiFunction<SocketChannel, SelectionKey, SelectionKey> readRegistrator = (socketChannel, selectionKey) -> socketChannel.register(selectionKey.selector(), SelectionKey.OP_READ);
-
-        IoFunction<SelectionKey, String> messageReader = selectionKey -> {
-            ByteBuffer senderBuffer = ByteBuffer.allocate(2048);
-            SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
-
-            int bytesRead = socketChannel.read(senderBuffer);
-
-            String message = null;
-            if (bytesRead > 0) {
-                senderBuffer.flip();
-
-                byte[] bytes = new byte[bytesRead];
-                senderBuffer.get(bytes);
-                message = new String(bytes, 0, bytesRead);
-                message = message.trim();
-                senderBuffer.clear();
-            }
-
-            return message;
-        };
-
-        IoBiConsumer<SelectionKey, String> messageWriter = (selectionKey, message) -> {
-            ByteBuffer buffer = ByteBuffer.allocate(2048);
-            SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
-            buffer.put(message.getBytes());
-            buffer.flip();
-            socketChannel.write(buffer);
-
-            selectionKey.interestOps(SelectionKey.OP_READ);
-        };
-
-        if (args.length != 1) {
-            System.err.println(USAGE);
-        }
-        else {
+        if (args.length == 1) {
             try {
                 final int port = Integer.parseInt(args[0]);
-                final InetSocketAddress inetSocketAddress = new InetSocketAddress(port);
-                final ChatServerFunctional chatServer = new ChatServerFunctional(inetSocketAddress, daemonProcessor, newConnectionManager, readRegistrator, messageReader, messageWriter);
-
-                // start the server in its own thread
-                Thread serverThread = new Thread(chatServer);
-                serverThread.start();
-                serverThread.join();
+                runServer(port, SocketFunctions.registerAcceptConnection,
+                                SocketFunctions.acceptConnection,
+                                SocketFunctions.readFromSocket,
+                                SocketFunctions.writeToSocket);
             }
             catch (NumberFormatException exception) {
                 System.err.println("Please enter a valid number for the port");
                 System.err.println(USAGE);
             }
-            catch (InterruptedException exception) {
-                exception.printStackTrace();
-            }
+        }
+        else {
+            System.err.println(USAGE);
         }
     }
 }
