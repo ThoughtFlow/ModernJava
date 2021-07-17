@@ -9,7 +9,6 @@ import java.nio.channels.SocketChannel;
 public interface SocketFunctions {
 
     /**
-     * ***todo Implement me***
      * This function is for the registration to receive new connections.
      *
      * Implement a function that:
@@ -21,13 +20,10 @@ public interface SocketFunctions {
      *   - Registers the selector accept new connections
      *   - Returns the selector
      */
-    IoFunction<InetSocketAddress, Selector> registerAcceptConnection = socketAddress -> {
-
-        throw new IOException("Not implemented");
-    };
+    IoFunction<InetSocketAddress, Selector> registerAcceptConnection = lab20.fin.SocketFunctions.registerAcceptConnection::apply;
+    // todo Implement me - replace the implementation from lab20.fin with yours
 
     /**
-     * ***todo Implement me***
      * This function is to accept a new connection.
      *
      * Implement a function that:
@@ -36,13 +32,10 @@ public interface SocketFunctions {
      *   - Configures it to be non-blocking
      *   - Returns the socket channel attached to the selection key
      */
-    IoFunction<SelectionKey, SocketChannel> acceptConnection = selectionKey -> {
-
-        throw new IOException("Not implemented");
-    };
+    IoFunction<SelectionKey, SocketChannel> acceptConnection = lab20.fin.SocketFunctions.acceptConnection::apply;
+    // todo Implement me - replace the implementation from lab20.fin with yours
 
     /**
-     * ***todo Implement me***
      * This function is to read from the socket.
      *
      * Implement a function that:
@@ -53,13 +46,10 @@ public interface SocketFunctions {
      *   - Places the byte buffer inside a string
      *   - Returns the string
      */
-    IoFunction<SelectionKey, String> readFromSocket = selectionKey -> {
-
-        throw new IOException("Not implemented");
-    };
+    IoFunction<SelectionKey, String> readFromSocket = lab20.fin.SocketFunctions.readFromSocket::apply;
+    // todo Implement me - replace the implementation from lab20.fin with yours
 
     /**
-     * ***todo Implement me***
      * This BiConsumer is to write to the socket.
      *
      * Implement a BiConsumer that:
@@ -70,7 +60,6 @@ public interface SocketFunctions {
      *   - Places the byte buffer inside a string
      *   - Returns the string
      */
-    IoBiConsumer<SelectionKey, String> writeToSocket = (selectionKey, message) -> {
-        throw new IOException("Not implemented");
-    };
+    IoBiConsumer<SelectionKey, String> writeToSocket = lab20.fin.SocketFunctions.writeToSocket::accept;
+    // todo Implement me - replace the implementation from lab20.fin with yours
 }

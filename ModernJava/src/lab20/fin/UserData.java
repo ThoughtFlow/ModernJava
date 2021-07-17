@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
+/**
+ * Holds the data for the user and connection.
+ */
 public class UserData {
 
     private final SocketChannel channel;

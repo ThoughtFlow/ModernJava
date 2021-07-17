@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 /**
  * Simplest Socket server using Java NIO. Will echo back text from a client.
@@ -14,27 +15,31 @@ import java.net.Socket;
 public class IoEchoServer {
 
     private final static int port = 8080;
-    public static final String STOP_SERVER = "Stop";
+    public static final String STOP_SERVER = "Shutdown";
     public static final String END_CHAT = "Bye";
 
     private static void runServer() throws IOException {
         try (ServerSocket serverSocket = new ServerSocket(port);) {
             System.out.println("Listening on port " + port);
 
-            String lastLine = "";
+            String lastLine = null;
 
-            while (!lastLine.equalsIgnoreCase(STOP_SERVER)) {
-                lastLine = "";
+            while (!STOP_SERVER.equalsIgnoreCase(lastLine)) {
+
                 try (Socket clientSocket = serverSocket.accept();) {
+                    lastLine = "";
                     try (BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                          BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()))) {
 
-                        while (!lastLine.equalsIgnoreCase(END_CHAT) && !lastLine.equalsIgnoreCase(STOP_SERVER)) {
+                        while (!END_CHAT.equalsIgnoreCase(lastLine) && !STOP_SERVER.equalsIgnoreCase(lastLine)) {
                             lastLine = reader.readLine();
                             writer.write("Received: " + lastLine);
                             writer.newLine();
                             writer.flush();
                         }
+                    }
+                    catch (SocketException e) {
+                        // Keep going with new connection in the event of failure.
                     }
                 }
             }

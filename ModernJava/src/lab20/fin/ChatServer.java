@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Server implementation.
+ */
 public class ChatServer implements Runnable, Closeable {
 
     private static final String USAGE = "USAGE: ChatServer port";

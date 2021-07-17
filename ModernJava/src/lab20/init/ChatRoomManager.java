@@ -5,6 +5,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Manages the chat rooms.
+ */
 public class ChatRoomManager {
 
     private final Map<String, List<UserData>> chatRooms = new HashMap<>();
