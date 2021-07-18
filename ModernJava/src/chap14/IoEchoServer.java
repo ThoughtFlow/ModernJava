@@ -27,6 +27,9 @@ public class IoEchoServer {
             while (!STOP_SERVER.equalsIgnoreCase(lastLine)) {
 
                 try (Socket clientSocket = serverSocket.accept();) {
+                    // Since Java IO is blocking and this program is single threaded, only one client can connect at a time.
+                    // This portion would have to be delegated to another thread to make it non-blocking.
+                    // Each connection would be assigned to its own thread - not optimal.
                     lastLine = "";
                     try (BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                          BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()))) {

@@ -119,7 +119,7 @@ public class NioEchoServer implements Runnable {
         SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
         logger.info("Reading from " + socketChannel.getRemoteAddress());
 
-        // allocate a buffer into which to read
+        // allocate a buffer from which to read
         ByteBuffer byteBuffer = ByteBuffer.allocate(2048);
 
         // read from the client into this buffer
