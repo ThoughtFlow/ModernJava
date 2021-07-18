@@ -110,7 +110,7 @@ public class NioEchoServer implements Runnable {
         // register for read-ready events (we don't care about write-ready yet)
         SelectionKey clientSelectionKey = socketChannel.register(selectionKey.selector(), SelectionKey.OP_READ);
         // attach our custom "client" state to the key (as we'll need it later)
-        clientSelectionKey.attach(new Client());
+        clientSelectionKey.attach(new MessageQueue());
         logger.info("Accepted connection from " + socketChannel.getRemoteAddress());
     }
 
@@ -134,7 +134,7 @@ public class NioEchoServer implements Runnable {
             byteBuffer.flip();
 
             // enqueue this buffer for later writing
-            Client client = (Client) selectionKey.attachment();
+            MessageQueue client = (MessageQueue) selectionKey.attachment();
 
             // Convert from byte to string
             byte[] bytes = new byte[numRead];
@@ -151,20 +151,20 @@ public class NioEchoServer implements Runnable {
     }
 
     private void onWrite(SelectionKey selectionKey) throws IOException {
-        // get the client state
-        Client client = (Client) selectionKey.attachment();
+        // get the messageQueue state
+        MessageQueue messageQueue = (MessageQueue) selectionKey.attachment();
 
         // get to the oldest enqueued buffer
-        String string = client.peek();
+        String string = messageQueue.peek();
         if (string == null) {
             logger.warning("Oops. Nothing to write. Something went wrong!");
         } else {
-            // get the client channel
+            // get the messageQueue channel
             SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
 
             logger.info("Writing " + string);
             logger.info("Writing to " + socketChannel.getRemoteAddress());
-            // write the buffer (this is non-blocking as the client is ready to receive data from us)
+            // write the buffer (this is non-blocking as the messageQueue is ready to receive data from us)
             ByteBuffer buffer = ByteBuffer.allocate(2048);
             string = "Received: " + string + "\r\n";
             buffer.put(string.getBytes());
@@ -172,34 +172,13 @@ public class NioEchoServer implements Runnable {
             socketChannel.write(buffer);
             if (!buffer.hasRemaining()) {
                 // we wrote the entire buffer, let's discard it
-                client.dequeue();
+                messageQueue.dequeue();
             }
-            if (client.isQueueEmpty()) {
+            if (messageQueue.isQueueEmpty()) {
                 // there is nothing more to write
                 // we are no longer interested in write-ready events
                 selectionKey.interestOps(SelectionKey.OP_READ);
             }
-        }
-    }
-
-    private static class Client {
-        // a queue of buffers that have been read and are ready to be written
-        private final Queue<String> stringQueue = new LinkedList<>();
-
-        public void enqueue(String string) {
-            this.stringQueue.add(string);
-        }
-
-        public String peek() {
-            return this.stringQueue.peek();
-        }
-
-        public String dequeue() {
-            return this.stringQueue.remove();
-        }
-
-        public boolean isQueueEmpty() {
-            return this.stringQueue.isEmpty();
         }
     }
 

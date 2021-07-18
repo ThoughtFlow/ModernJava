@@ -12,6 +12,9 @@ import java.nio.channels.CompletionHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Echo server implementation with Async completion handlers
+ */
 public class NioAsyncEchoServer implements Runnable {
     private static final Logger logger = Logger.getLogger(NioAsyncEchoServer.class.getName());
     private static final String SHUTDOWN = "shutdown";
@@ -91,7 +94,8 @@ public class NioAsyncEchoServer implements Runnable {
             logger.info("Accepted connection");
 
             // handle this connection
-            ByteBuffer buffer = ByteBuffer.allocate(16);
+            ByteBuffer buffer = ByteBuffer.allocate(2048);
+
             logger.info("Initial read");
             clientChannel.read(buffer, buffer, new ReadCompletionHandler(clientChannel));
         }
@@ -109,13 +113,16 @@ public class NioAsyncEchoServer implements Runnable {
     private static class ReadCompletionHandler implements CompletionHandler<Integer, ByteBuffer> {
 
         private final AsynchronousSocketChannel clientChannel;
+        private final MessageQueue queue;
 
         private ReadCompletionHandler(AsynchronousSocketChannel clientChannel) {
             this.clientChannel = clientChannel;
+            this.queue = new MessageQueue();
         }
 
         @Override
         public void completed(Integer numRead, ByteBuffer buffer) {
+
             if (numRead == -1) {
                 try {
                     logger.info("Closing");
@@ -127,8 +134,24 @@ public class NioAsyncEchoServer implements Runnable {
                 logger.info("Read " + numRead + " bytes. Initiating write.");
                 buffer.flip();
 
-                clientChannel.write(buffer, buffer, new WriteCompletionHandler(clientChannel));
-                buffer = ByteBuffer.allocate(16);
+                //// start
+
+                    // Convert from byte to string
+                    byte[] bytes = new byte[numRead];
+                    buffer.get(bytes);
+                    String message = new String(bytes, 0, numRead);
+                    message = message.trim();
+
+                    logger.info("Received: " + message);
+                    queue.enqueue("Received: " + message + "\r\n");
+
+
+                /////end
+
+
+
+                clientChannel.write(buffer, queue, new WriteCompletionHandler(clientChannel));
+                buffer = ByteBuffer.allocate(2048);
                 logger.info("Next read");
                 clientChannel.read(buffer, buffer, this);
             }
@@ -140,7 +163,7 @@ public class NioAsyncEchoServer implements Runnable {
         }
     }
 
-    private static class WriteCompletionHandler implements CompletionHandler<Integer, ByteBuffer> {
+    private static class WriteCompletionHandler implements CompletionHandler<Integer, MessageQueue> {
 
         private final AsynchronousSocketChannel clientChannel;
 
@@ -149,18 +172,34 @@ public class NioAsyncEchoServer implements Runnable {
         }
 
         @Override
-        public void completed(Integer bytesWritten, ByteBuffer buffer) {
+        public void completed(Integer bytesWritten, MessageQueue queue) {
 
-            if (buffer.hasRemaining()) {
-                logger.info("Wrote " + bytesWritten + " bytes. Scheduling write of " + buffer.remaining() + " more.");
-                clientChannel.write(buffer, buffer, this);
-            } else {
+            // Start here
+
+            if (queue.peek() != null) {
+                ByteBuffer buffer = ByteBuffer.allocate(2048);
+                String message = queue.dequeue();
+                buffer.put(message.getBytes());
+                buffer.flip();
+                clientChannel.write(buffer, queue, this);
+                logger.info("Sent " + message);
+            }
+            else {
                 logger.info("Done writing " + bytesWritten + " bytes");
             }
+
+            /// end here
+
+//            if (buffer.hasRemaining()) {
+//                logger.info("Wrote " + bytesWritten + " bytes. Scheduling write of " + buffer.remaining() + " more.");
+//                clientChannel.write(buffer, queue, this);
+//            } else {
+//                logger.info("Done writing " + bytesWritten + " bytes");
+//            }
         }
 
         @Override
-        public void failed(Throwable exc, ByteBuffer attachment) {
+        public void failed(Throwable exc, MessageQueue attachment) {
             logger.log(Level.WARNING, "Failed on write", exc);
         }
     }
