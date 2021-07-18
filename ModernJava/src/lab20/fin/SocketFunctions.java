@@ -86,12 +86,12 @@ public interface SocketFunctions {
      * This BiConsumer is to write to the socket.
      *
      * Implement a BiConsumer that:
-     *   - Receives a selection key and string to send
+     *   - Receives a selection key and string representing the message to send
      *   - Allocates a ByteBuffer of 2048 bytes
      *   - Puts the string inside the buffer
      *   - Flips the buffer
      *   - Places the byte buffer inside a string
-     *   - Returns the string
+     *   - Returns the string representing the message to send
      */
     IoBiConsumer<SelectionKey, String> writeToSocket = (selectionKey, message) -> {
 

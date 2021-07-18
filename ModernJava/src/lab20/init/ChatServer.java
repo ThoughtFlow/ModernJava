@@ -9,6 +9,7 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,7 +18,8 @@ import java.util.logging.Logger;
  */
 public class ChatServer implements Runnable, Closeable {
 
-    private static final String USAGE = "USAGE: ChatServer port";
+    private  static final int DEFAULT_PORT = 8080;
+    private static final String USAGE = "USAGE: ChatServer [port] (default port is " + DEFAULT_PORT + ")";
     private static final String BYE_MESSAGE = "BYE";
     private static final Logger logger = Logger.getLogger(ChatServer.class.getName());
 
@@ -223,21 +225,27 @@ public class ChatServer implements Runnable, Closeable {
 
     public static void main(String[] args) {
 
-        if (args.length == 1) {
-            try {
-                final int port = Integer.parseInt(args[0]);
-                runServer(port, SocketFunctions.registerAcceptConnection,
-                                SocketFunctions.acceptConnection,
-                                SocketFunctions.readFromSocket,
-                                SocketFunctions.writeToSocket);
+        Consumer<Integer> runServer = port -> {
+            runServer(port,
+                      SocketFunctions.registerAcceptConnection,
+                      SocketFunctions.acceptConnection,
+                      SocketFunctions.readFromSocket,
+                      SocketFunctions.writeToSocket);
+        };
+
+        switch (args.length) {
+            case 0 -> runServer.accept(DEFAULT_PORT);
+            case 1 -> {
+                try {
+                    final int port = Integer.parseInt(args[0]);
+                    runServer.accept(port);
+                }
+                catch (NumberFormatException exception) {
+                    System.err.println("Please enter a valid number for the port");
+                    System.err.println(USAGE);
+                }
             }
-            catch (NumberFormatException exception) {
-                System.err.println("Please enter a valid number for the port");
-                System.err.println(USAGE);
-            }
-        }
-        else {
-            System.err.println(USAGE);
+            default -> System.err.println(USAGE);
         }
     }
 }

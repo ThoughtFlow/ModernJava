@@ -1,6 +1,5 @@
 package lab20.init;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -44,7 +43,7 @@ public interface SocketFunctions {
      *   - Reads from the socket channel into the byte buffer
      *   - Flips the buffer
      *   - Places the byte buffer inside a string
-     *   - Returns the string
+     *   - Returns the string representing the message received
      */
     IoFunction<SelectionKey, String> readFromSocket = lab20.fin.SocketFunctions.readFromSocket::apply;
     // todo Implement me - replace the implementation from lab20.fin with yours
@@ -53,12 +52,12 @@ public interface SocketFunctions {
      * This BiConsumer is to write to the socket.
      *
      * Implement a BiConsumer that:
-     *   - Receives a selection key and string to send
+     *   - Receives a selection key and string representing the message to send
      *   - Allocates a ByteBuffer of 2048 bytes
      *   - Puts the string inside the buffer
      *   - Flips the buffer
      *   - Places the byte buffer inside a string
-     *   - Returns the string
+     *   - Returns the string representing the message to send
      */
     IoBiConsumer<SelectionKey, String> writeToSocket = lab20.fin.SocketFunctions.writeToSocket::accept;
     // todo Implement me - replace the implementation from lab20.fin with yours
