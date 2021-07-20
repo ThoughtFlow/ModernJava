@@ -11,24 +11,22 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * Single-threaded but multi-client-capable echo server
  */
-public class NioEchoServer implements Runnable {
+public class NioEventDispatchEchoServer implements Runnable {
 
-    private static final Logger logger = Logger.getLogger(NioEchoServer.class.getName());
+    private static final Logger logger = Logger.getLogger(NioEventDispatchEchoServer.class.getName());
     public static final String SHUTDOWN = "shutdown";
 
     private final InetSocketAddress inetSocketAddress;
 
     private Selector selector;
 
-    public NioEchoServer(InetSocketAddress inetSocketAddress) {
+    public NioEventDispatchEchoServer(InetSocketAddress inetSocketAddress) {
         if (inetSocketAddress == null) {
             throw new NullPointerException("Parameter inetSocketAddress must not be null");
         } else if (inetSocketAddress.isUnresolved()) {
@@ -166,7 +164,7 @@ public class NioEchoServer implements Runnable {
             logger.info("Writing to " + socketChannel.getRemoteAddress());
             // write the buffer (this is non-blocking as the messageQueue is ready to receive data from us)
             ByteBuffer buffer = ByteBuffer.allocate(2048);
-            string = "Received: " + string + "\r\n";
+            string = "Echo back: " + string + "\r\n";
             buffer.put(string.getBytes());
             buffer.flip();
             socketChannel.write(buffer);
@@ -184,17 +182,17 @@ public class NioEchoServer implements Runnable {
 
     public static void main(String[] args) throws IOException {
         if (args.length == 0) {
-            System.err.println("USAGE: NioEchoServer [hostname] <port>");
+            System.err.println("USAGE: NioEventDispatchEchoServer [hostname] <port>");
         } else {
             final String hostname = args.length >= 2 ? args[0] : "localhost";
             final int port = Integer.parseInt(args[args.length >= 2 ? 1 : 0]);
             final InetSocketAddress inetSocketAddress = new InetSocketAddress(hostname, port);
-            final NioEchoServer nioEchoServer = new NioEchoServer(inetSocketAddress);
+            final NioEventDispatchEchoServer nioEventDispatchEchoServer = new NioEventDispatchEchoServer(inetSocketAddress);
             // start the server in its own thread
-            new Thread(nioEchoServer).start();
+            new Thread(nioEventDispatchEchoServer).start();
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 public void run() {
-                    nioEchoServer.shutdown();
+                    nioEventDispatchEchoServer.shutdown();
                 }
             });
             while (true) {
@@ -204,7 +202,7 @@ public class NioEchoServer implements Runnable {
                     System.out.println("Press CTRL+C to shutdown this server");
                     break; // don't shut down
                 } else if (SHUTDOWN.equals(line)) {
-                    nioEchoServer.shutdown();
+                    nioEventDispatchEchoServer.shutdown();
                     break;
                 }
             }

@@ -36,7 +36,7 @@ public class IoEchoServer {
 
                         while (!END_CHAT.equalsIgnoreCase(lastLine) && !STOP_SERVER.equalsIgnoreCase(lastLine)) {
                             lastLine = reader.readLine();
-                            writer.write("Received: " + lastLine);
+                            writer.write("Echo back: " + lastLine);
                             writer.newLine();
                             writer.flush();
                         }

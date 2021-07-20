@@ -15,14 +15,14 @@ import java.util.logging.Logger;
 /**
  * Echo server implementation with Async completion handlers
  */
-public class NioAsyncEchoServer implements Runnable {
-    private static final Logger logger = Logger.getLogger(NioAsyncEchoServer.class.getName());
+public class NioCallbackEchoServer implements Runnable {
+    private static final Logger logger = Logger.getLogger(NioCallbackEchoServer.class.getName());
     private static final String SHUTDOWN = "shutdown";
 
     private final InetSocketAddress inetSocketAddress;
     private AsynchronousServerSocketChannel serverChannel;
 
-    public NioAsyncEchoServer(InetSocketAddress inetSocketAddress) {
+    public NioCallbackEchoServer(InetSocketAddress inetSocketAddress) {
         if (inetSocketAddress == null) {
             throw new IllegalArgumentException("Parameter inetSocketAddress must not be null");
         } else if (inetSocketAddress.isUnresolved()) {
@@ -57,12 +57,12 @@ public class NioAsyncEchoServer implements Runnable {
 
     public static void main(String[] args) throws IOException {
         if (args.length == 0) {
-            System.err.println("USAGE: NioAsyncEchoServer [hostname] <port>");
+            System.err.println("USAGE: NioCallbackEchoServer [hostname] <port>");
         } else {
             final String hostname = args.length >= 2 ? args[0] : "localhost";
             final int port = Integer.parseInt(args[args.length >= 2 ? 1 : 0]);
             final InetSocketAddress inetSocketAddress = new InetSocketAddress(hostname, port);
-            final NioAsyncEchoServer nioEchoServer = new NioAsyncEchoServer(inetSocketAddress);
+            final NioCallbackEchoServer nioEchoServer = new NioCallbackEchoServer(inetSocketAddress);
             nioEchoServer.run();
             while (true) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -78,6 +78,9 @@ public class NioAsyncEchoServer implements Runnable {
         }
     }
 
+    /**
+     * This class handles the socket accept event.
+     */
     private static class AcceptCompletionHandler implements CompletionHandler<AsynchronousSocketChannel, Void> {
 
         private final AsynchronousServerSocketChannel serverSocketChannel;
@@ -110,6 +113,9 @@ public class NioAsyncEchoServer implements Runnable {
         }
     }
 
+    /**
+     * This class handles the socket read event.
+     */
     private static class ReadCompletionHandler implements CompletionHandler<Integer, ByteBuffer> {
 
         private final AsynchronousSocketChannel clientChannel;
@@ -134,21 +140,14 @@ public class NioAsyncEchoServer implements Runnable {
                 logger.info("Read " + numRead + " bytes. Initiating write.");
                 buffer.flip();
 
-                //// start
+                // Convert from byte to string
+                byte[] bytes = new byte[numRead];
+                buffer.get(bytes);
+                String message = new String(bytes, 0, numRead);
+                message = message.trim();
 
-                    // Convert from byte to string
-                    byte[] bytes = new byte[numRead];
-                    buffer.get(bytes);
-                    String message = new String(bytes, 0, numRead);
-                    message = message.trim();
-
-                    logger.info("Received: " + message);
-                    queue.enqueue("Received: " + message + "\r\n");
-
-
-                /////end
-
-
+                logger.info("Received: " + message);
+                queue.enqueue("Echo back: " + message + "\r\n");
 
                 clientChannel.write(buffer, queue, new WriteCompletionHandler(clientChannel));
                 buffer = ByteBuffer.allocate(2048);
@@ -163,6 +162,9 @@ public class NioAsyncEchoServer implements Runnable {
         }
     }
 
+    /**
+     * This class handles the socket write event.
+     */
     private static class WriteCompletionHandler implements CompletionHandler<Integer, MessageQueue> {
 
         private final AsynchronousSocketChannel clientChannel;
@@ -187,15 +189,6 @@ public class NioAsyncEchoServer implements Runnable {
             else {
                 logger.info("Done writing " + bytesWritten + " bytes");
             }
-
-            /// end here
-
-//            if (buffer.hasRemaining()) {
-//                logger.info("Wrote " + bytesWritten + " bytes. Scheduling write of " + buffer.remaining() + " more.");
-//                clientChannel.write(buffer, queue, this);
-//            } else {
-//                logger.info("Done writing " + bytesWritten + " bytes");
-//            }
         }
 
         @Override
